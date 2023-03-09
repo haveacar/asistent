@@ -1,4 +1,4 @@
-<Commands will be in JSON file>:
+"""<Commands will be in JSON file>:
 config = {
     "intents": {
         "greeting": {
@@ -17,9 +17,9 @@ config = {
             "responses": search_for_term_on_google
         },
     },
-    "failure_phrases": play_failure_phrase
-}
+    "failure_phrases": play_failure_phrase"""
 
+"""
 <Or in dictioanry>:
 commands = {
     ("hello", "hi", "morning", "привет"): play_greetings,
@@ -30,6 +30,6 @@ commands = {
     ("translate", "interpretation", "translation", "перевод", "перевести", "переведи"): get_translation,
     ("language", "язык"): change_language,
     ("weather", "forecast", "погода", "прогноз"): get_weather_forecast,
-}
+}"""
 
 

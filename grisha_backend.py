@@ -29,7 +29,8 @@ class Time:
 
     def timer(self):
         print("Timer started")
-        time_sleep = "Get time from user"
+        # Time sleep - get from user
+        time_sleep = 3
         sleep(time_sleep)
         print("Timer finished")
 
@@ -37,6 +38,7 @@ class Time:
         # Parsing time
         current_date = datetime.now()
         current_time = current_date.time()
+
 
 class GoogleSearch:
 
@@ -63,4 +65,13 @@ class WikipediaSearch:
 
 class SendEmail:
     # Send email with voice
+    pass
+
+class Calculator:
+    """
+    Человек говорит - 2 + 2
+    У нас есть список команд(умножить, разделить и тд)
+    мы проверям какая команда в тексте
+    а потом делаем: первый индекс фразы - дейтвие - второй индекс фразы
+    """
     pass
