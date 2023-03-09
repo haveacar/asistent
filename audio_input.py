@@ -16,9 +16,11 @@ class Audio:
         with self.microphone as audio_file:
             # Start record
             print("Recording...")
-            self.audio = self.recog.listen(audio_file)
             # Remove noices
             self.recog.adjust_for_ambient_noise(audio_file)
+            self.audio = self.recog.listen(audio_file)
+
+
 
         print("Converting Speech to Text...")
 
@@ -33,8 +35,3 @@ class Audio:
 
         # Clearing the queue and playing text
         self.engine.runAndWait()
-        
-
-
-
-

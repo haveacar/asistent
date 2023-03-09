@@ -31,22 +31,19 @@ class Assistant(Tk):
         # audio input
         self.audio = Audio()
 
-
-
-    def start(self)->None:
-        '''Start func
+    def start(self) -> None:
+        """Start func
         Create labels, place frames, buttons,
-        '''
+        """
 
         # grid
         self.top_frame.pack(side=TOP)
         self.central_frame.pack(side=TOP, pady=20)
         self.bottom_frame.pack(side=BOTTOM, pady=20)
 
-
         # load voice image
         with Image.open(VOICE_PATH) as img:
-            voice_image = ImageTk.PhotoImage(img.resize(size=(30,30)))
+            voice_image = ImageTk.PhotoImage(img.resize(size=(30, 30)))
 
         # load voice image
         with Image.open(IMAGE_PATH) as img:
@@ -59,16 +56,14 @@ class Assistant(Tk):
         self.entry_text.grid(column=1, row=0)
         btn_menu = Button(master=self.top_frame, text="Menu")
         btn_menu.pack(side=LEFT)
-        self.btn_help= Button(master=self.central_frame, text="How I can help?", font=20, command=self.presentation)
+        self.btn_help = Button(master=self.central_frame, text="How I can help?", font=20, command=self.presentation)
         self.btn_help.pack(side=TOP, pady=20)
 
         # Labels
         Label(master=self.top_frame, text="AIBO Voice Assistant", font=("Arial", 25, "bold"),
               foreground='gold').pack(side=LEFT)
-        voice_img_lbl=Label(master=self.central_frame, image=bg_image)
+        voice_img_lbl = Label(master=self.central_frame, image=bg_image)
         voice_img_lbl.pack(side=TOP, before=self.btn_help)
-
-
 
         self.mainloop()
 
@@ -81,15 +76,8 @@ class Assistant(Tk):
             btn = Button(master=self.central_frame, text=next_tex, font=20, anchor='center')
             btn.pack(pady=20, side=LEFT)
 
-
     def voice_click(self):
-        label_recording = Label(master=self.bottom_frame, text="Recording...")
+        label_recording = Label(master=self.bottom_frame, text="Recording(Voice click)...")
         label_recording.grid(column=2, row=0)
         self.audio.voice_input()
         print("wtssteysty")
-
-
-
-
-
-

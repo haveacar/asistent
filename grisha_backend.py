@@ -1,6 +1,8 @@
 # from audio_input import Audio
 # from googletrans import *
 from datetime import datetime
+from time import *
+import pytz
 
 
 # class Translate(Audio):
@@ -25,9 +27,16 @@ class Time:
     def alarm(self):
         pass
 
-    def time(self):
-        pass
+    def timer(self):
+        print("Timer started")
+        time_sleep = "Get time from user"
+        sleep(time_sleep)
+        print("Timer finished")
 
+    def time(self):
+        # Parsing time
+        current_date = datetime.now()
+        current_time = current_date.time()
 
 class GoogleSearch:
 
