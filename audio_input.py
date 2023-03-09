@@ -1,6 +1,6 @@
 import speech_recognition as sr
 import pyttsx3 as py
-from googletrans import *
+
 
 
 class Audio:
@@ -39,13 +39,3 @@ class Audio:
 
 
 
-"""
-class Translate(Audio):
-    def __init__(self) -> None:
-        super(Translate, self).__init__()
-        self.translator = Translator()
-
-    def translate(self):
-        # self.result = self.translator.translate(self.text , dest="ru")
-        # print(self.result)
-        print(self.text)"""
