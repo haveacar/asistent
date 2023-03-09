@@ -20,55 +20,60 @@ class Assistant(Tk):
         self.minsize(1000, 750)
 
         # frames
-        self.top_frame = Frame(bg='#404040')
-        self.left_frame = Frame(bg='#404040')
-        self.right_frame = Frame(bg='#404040')
-        self.bottom_frame = Frame(bg='#404040')
+        self.top_frame = Frame(bg='#404040', width=1100, height=150)
+        self.central_frame = Frame(bg='#404040')
+        self.bottom_frame = Frame(bg='#404040', width=1100, height=150)
 
         # lists
         self.greetings_label_list = []
 
-    def start(self):
-        # display frames
-        self.top_frame.grid(column=0, row=0)
-        self.left_frame.grid(column=0, row=1)
-        self.right_frame.grid(column=1, row=1, padx=10, sticky='nsew', rowspan=2, columnspan=2)
-        self.bottom_frame.grid(column=0, row=2)
 
-        # load left image
-        with Image.open(BG_PATH) as img:
-            bg_image = ImageTk.PhotoImage(img)
+    def start(self)->None:
+
+        # grid
+        self.top_frame.pack(side=TOP)
+        self.central_frame.pack(side=TOP, pady=20)
+        self.bottom_frame.pack(side=BOTTOM, pady=20)
+
 
         # load voice image
         with Image.open(VOICE_PATH) as img:
-            voice_image = ImageTk.PhotoImage(img)
+            voice_image = ImageTk.PhotoImage(img.resize(size=(30,30)))
 
-        # set up bground image
-        background_label = Label(self.left_frame, image=bg_image)
-        background_label.pack()
-
-        # Labels
-        top_lbl = Label(master=self.top_frame, text="AIBO Voice Assistant", font=("Arial", 25, "bold"),
-                        foreground='gold')
-        top_lbl.pack(side=LEFT, padx=10)
-        lbl_name = Label(master=self.right_frame, text=my_name, font=25, foreground='gold', bg='#404040')
-        lbl_name.pack(side=TOP, anchor=N)
+        # load voice image
+        with Image.open(IMAGE_PATH) as img:
+            bg_image = ImageTk.PhotoImage(img.resize(size=(700, 457)))
 
         # Buttons
-        Button(self.top_frame, padx=1, pady=5, text="MENU").pack(side=LEFT, before=top_lbl)
-        Button(self.bottom_frame, image=voice_image).pack(side=RIGHT, padx=20)
-        Button(self.bottom_frame, text="TEXT", height=6, width=7).pack(side=RIGHT, padx=20)
-        self.btn_what_know = Button(self.right_frame, text='What I know:', command=self.presentation)
-        self.btn_what_know.pack(side=TOP, anchor=N)
+        self.btn_voice = Button(master=self.bottom_frame, image=voice_image)
+        self.btn_voice.grid(column=0, row=0, sticky='nsew')
+        self.entry_text = Entry(master=self.bottom_frame, width=40)
+        self.entry_text.grid(column=1, row=0)
+        btn_menu = Button(master=self.top_frame, text="Menu")
+        btn_menu.pack(side=LEFT)
+        self.btn_help= Button(master=self.central_frame, text="How I can help?", font=20, command=self.presentation)
+        self.btn_help.pack(side=TOP, pady=20)
+
+        # Labels
+        Label(master=self.top_frame, text="AIBO Voice Assistant", font=("Arial", 25, "bold"),
+              foreground='gold').pack(side=LEFT)
+        voice_img_lbl=Label(master=self.central_frame, image=bg_image)
+        voice_img_lbl.pack(side=TOP, before=self.btn_help)
+
 
         self.mainloop()
 
     def presentation(self) -> None:
         """func display greetings labels """
 
-        self.btn_what_know.config(state='disabled')  # botton disabled
+        self.btn_help.config(state='disabled')  # botton disabled
 
         for next_tex in tuple_greetings:
-            btn = Button(master=self.right_frame, text=next_tex, font=20, anchor='center')
-            btn.pack(pady=20)
-            self.greetings_label_list.append(btn)
+            btn = Button(master=self.central_frame, text=next_tex, font=20, anchor='center')
+            btn.pack(pady=20, side=LEFT)
+
+
+
+
+
+
