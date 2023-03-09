@@ -6,6 +6,7 @@ from constans import *
 if __name__ == '__main__':
     sys.exit()
 
+# Grisha writed it
 
 class Assistant(Tk):
     """ Main class Assistant"""
