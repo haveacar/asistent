@@ -2,6 +2,7 @@ import sys
 from tkinter import *
 from PIL import ImageTk, Image
 from constans import *
+from audio_input import *
 
 if __name__ == '__main__':
     sys.exit()
@@ -27,8 +28,15 @@ class Assistant(Tk):
         # lists
         self.greetings_label_list = []
 
+        # audio input
+        self.audio = Audio()
+
+
 
     def start(self)->None:
+        '''Start func
+        Create labels, place frames, buttons,
+        '''
 
         # grid
         self.top_frame.pack(side=TOP)
@@ -45,7 +53,7 @@ class Assistant(Tk):
             bg_image = ImageTk.PhotoImage(img.resize(size=(700, 457)))
 
         # Buttons
-        self.btn_voice = Button(master=self.bottom_frame, image=voice_image)
+        self.btn_voice = Button(master=self.bottom_frame, image=voice_image, command=self.voice_click)
         self.btn_voice.grid(column=0, row=0, sticky='nsew')
         self.entry_text = Entry(master=self.bottom_frame, width=40)
         self.entry_text.grid(column=1, row=0)
@@ -61,6 +69,7 @@ class Assistant(Tk):
         voice_img_lbl.pack(side=TOP, before=self.btn_help)
 
 
+
         self.mainloop()
 
     def presentation(self) -> None:
@@ -71,6 +80,13 @@ class Assistant(Tk):
         for next_tex in tuple_greetings:
             btn = Button(master=self.central_frame, text=next_tex, font=20, anchor='center')
             btn.pack(pady=20, side=LEFT)
+
+
+    def voice_click(self):
+        label_recording = Label(master=self.bottom_frame, text="Recording...")
+        label_recording.grid(column=2, row=0)
+        self.audio.voice_input()
+        print("wtssteysty")
 
 
 
