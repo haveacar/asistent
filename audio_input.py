@@ -2,7 +2,6 @@ import speech_recognition as sr
 import pyttsx3 as py
 
 
-
 class Audio:
     """Input Voice class"""
     def __init__(self) -> None:
@@ -34,7 +33,7 @@ class Audio:
 
         # Clearing the queue and playing text
         self.engine.runAndWait()
-
+        
 
 
 
