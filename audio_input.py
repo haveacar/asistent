@@ -1,9 +1,15 @@
 import speech_recognition as sr
+
+# grisha please check all time stack
+#
+
+
 import pyttsx3 as py
 
 
 class Audio:
     """Input Voice class"""
+
     def __init__(self) -> None:
         self.recog = sr.Recognizer()
         self.microphone = sr.Microphone()
@@ -20,8 +26,6 @@ class Audio:
             self.recog.adjust_for_ambient_noise(audio_file)
             self.audio = self.recog.listen(audio_file)
 
-
-
         print("Converting Speech to Text...")
 
         try:
@@ -35,3 +39,4 @@ class Audio:
 
         # Clearing the queue and playing text
         self.engine.runAndWait()
+
