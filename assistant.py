@@ -47,7 +47,7 @@ class Assistant(Tk):
             bg_image = ImageTk.PhotoImage(img.resize(size=(650, 430)))
 
         # Buttons
-        self.btn_voice = Button(master=self.bottom_frame, image=voice_image, command=self.voice_click,
+        self.btn_voice = Button(master=self.bottom_frame, image=voice_image, command=self.voice_input,
                                 highlightbackground='#404040')
         self.btn_voice.grid(column=0, row=0, sticky='nsew')
         self.entry_text = Entry(master=self.bottom_frame, width=40, highlightbackground='#404040')
@@ -67,6 +67,9 @@ class Assistant(Tk):
                                    highlightbackground='#404040')
         self.voice_say_lbl.pack(side=TOP, before=self.btn_help, pady=5)
 
+        # Bind event Enter
+        self.entry_text.bind("<Return>", self.callback)
+
         self.mainloop()
 
     def presentation(self) -> None:
@@ -77,9 +80,9 @@ class Assistant(Tk):
         for next_tex in tuple_greetings:
             btn = Button(master=self.central_frame, text=next_tex, font=20, anchor='center',
                          highlightbackground='#404040')
-            btn.pack(pady=20, side=LEFT)
+            btn.pack(pady=5, side=LEFT)
 
-    def voice_input(self):
+    def voice_input(self)->None:
         """
         voice input function from microphone
         """
@@ -106,11 +109,33 @@ class Assistant(Tk):
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
             self.voice_say_lbl.config(
                 text="Could not request results from Google Speech Recognition service; {0}".format(e))
-
         else:
             if len(result) != 0:
                 text = result.get('alternative')[0].get('transcript')
                 self.voice_say_lbl.config(text=text.title())
 
-    def voice_click(self) -> None:
-        self.voice_input()
+                self.handing_user_events(text)
+
+
+    def callback(self, e)->None:
+        """
+        CallBack func get str from Entry()
+        :param e: e.widget
+        """
+        text= self.entry_text.get()
+        print(text)
+        self.handing_user_events(text)
+
+    def handing_user_events(self, text):
+
+        match text:
+            # current time now
+            case "what's time now" | "time now":
+                print("Time")
+
+            case "what's day today" | "date today":
+                print("Date")
+
+
+
+
