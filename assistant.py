@@ -36,7 +36,6 @@ class Assistant(Tk):
         """Start func
         Create labels, place frames, buttons,
         """
-
         # grid
         self.top_frame.pack(side=TOP)
         self.central_frame.pack(side=TOP, pady=20)
@@ -48,7 +47,7 @@ class Assistant(Tk):
 
         # load voice image
         with Image.open(IMAGE_PATH) as img:
-            bg_image = ImageTk.PhotoImage(img.resize(size=(650, 430)))
+            bg_image = ImageTk.PhotoImage(img.resize(size=(552, 365)))
 
         # Buttons
         self.btn_voice = Button(master=self.bottom_frame, image=voice_image, command=self.voice_input,
@@ -132,6 +131,7 @@ class Assistant(Tk):
         text = self.entry_text.get()
         print(text)
         self.user_request(text)
+
 
     def user_request(self, text):
         """
