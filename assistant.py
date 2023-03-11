@@ -3,6 +3,7 @@ from tkinter import *
 from PIL import ImageTk, Image
 from constans import *
 import speech_recognition as sr
+from response import *
 
 if __name__ == '__main__':
     sys.exit()
@@ -27,6 +28,9 @@ class Assistant(Tk):
 
         # lists
         self.greetings_label_list = []
+
+        # init class response
+        self.responses = Response()
 
     def start(self) -> None:
         """Start func
@@ -60,12 +64,16 @@ class Assistant(Tk):
 
         # Labels
         Label(master=self.top_frame, text="AIBO Voice Assistant", font=("Arial", 25, "bold"),
-              foreground='gold', highlightbackground='#404040').pack(side=LEFT)
+              foreground='gold', background='#404040').pack(side=LEFT)
         voice_img_lbl = Label(master=self.central_frame, image=bg_image)
         voice_img_lbl.pack(side=TOP, before=self.btn_help)
         self.voice_say_lbl = Label(master=self.central_frame, text=" ", foreground='gold', font=("Comic Sans MS", 20),
-                                   highlightbackground='#404040')
+                                   background='#404040')
         self.voice_say_lbl.pack(side=TOP, before=self.btn_help, pady=5)
+
+        self.response_lbl = Label(master=self.central_frame, text=" ", foreground='gold', font=("Comic Sans MS", 25),
+                                  background='#404040')
+        self.response_lbl.pack(side=TOP, after=self.voice_say_lbl, pady=5)
 
         # Bind event Enter
         self.entry_text.bind("<Return>", self.callback)
@@ -82,15 +90,15 @@ class Assistant(Tk):
                          highlightbackground='#404040')
             btn.pack(pady=5, side=LEFT)
 
-    def voice_input(self)->None:
+    def voice_input(self) -> None:
         """
         voice input function from microphone
         """
         # create a recognizer object
         r = sr.Recognizer()
 
-        # set the timeout to 2 seconds
-        r.pause_threshold = 2
+        # set the timeout to 1 seconds
+        r.pause_threshold = 1
 
         # capture audio from the default microphone
         with sr.Microphone() as source:
@@ -113,29 +121,31 @@ class Assistant(Tk):
             if len(result) != 0:
                 text = result.get('alternative')[0].get('transcript')
                 self.voice_say_lbl.config(text=text.title())
+                print(text)
+                self.user_request(text)
 
-                self.handing_user_events(text)
-
-
-    def callback(self, e)->None:
+    def callback(self, e) -> None:
         """
         CallBack func get str from Entry()
         :param e: e.widget
         """
-        text= self.entry_text.get()
+        text = self.entry_text.get()
         print(text)
-        self.handing_user_events(text)
+        self.user_request(text)
 
-    def handing_user_events(self, text):
-
+    def user_request(self, text):
+        """
+        Func processing user requests
+        :param text: str
+        :return:
+        """
         match text:
             # current time now
             case "what's time now" | "time now":
-                print("Time")
+                response = self.responses.time_now()
+                self.response_lbl.config(text=response)
 
-            case "what's day today" | "date today":
-                print("Date")
-
-
-
-
+            # current date now
+            case "what's the day today" | "date today" | "date now" | "what's the date today" | "day today":
+                response = self.responses.day_today()
+                self.response_lbl.config(text=response)
