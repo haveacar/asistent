@@ -136,76 +136,89 @@ class Assistant(Tk):
         print(text)
         self.user_request(text)
 
-    def create_window_wiki(self)->None:
-
+    def create_window_wiki(self) -> None:
+        """
+        func create wikipedia window
+        """
         self.btns_list = []
 
-        def push_bt(title):
-            print(title)
+        def push_bt(title: str) -> None:
+            """
+            Func push button, destroy Buttons, text insert from wiki
+            :param title: str tittle
+            """
 
-            for b in self.btns_list: b.destroy() # destroy tittle Buttons
-
-            wiki_text=self.responses.wiki_text_answer(title)
+            for b in self.btns_list: b.destroy()  # destroy tittle Buttons
+            wiki_text = self.responses.wiki_text_answer(title)
             text_w.insert(1.0, wiki_text)
 
-
-        def create_bt(titles_search:list)->None:
+        def create_bt(titles_search: list) -> None:
             """
             create buttons function and Label
             :param titles_search: list(titles wiki_answer)
             """
             if self.status:
-                for b in self.btns_list: b.destroy() # destroy tittle Buttons
+                for b in self.btns_list: b.destroy()  # destroy tittle Buttons
 
-            self.status= True
-            if len(titles_search) > 0: # check titles response wikipedia
-                for i in range(len(titles_search)):
-                    new_but = Button(master=wiki, text=titles_search[i], command=lambda: push_bt(titles_search[i]))
-                    new_but.pack()
-                    self.btns_list.append(new_but)
+            self.status = True
+            if len(titles_search) > 0:  # check titles response wikipedia
+
+                new_but0 = Button(master=wiki, text=titles_search[0], command=lambda: push_bt(titles_search[0]))
+                new_but1 = Button(master=wiki, text=titles_search[1], command=lambda: push_bt(titles_search[1]))
+                new_but2 = Button(master=wiki, text=titles_search[2], command=lambda: push_bt(titles_search[2]))
+                new_but3 = Button(master=wiki, text=titles_search[3], command=lambda: push_bt(titles_search[3]))
+                new_but4 = Button(master=wiki, text=titles_search[4], command=lambda: push_bt(titles_search[4]))
+                new_but5 = Button(master=wiki, text=titles_search[5], command=lambda: push_bt(titles_search[5]))
+                new_but6 = Button(master=wiki, text=titles_search[6], command=lambda: push_bt(titles_search[6]))
+                new_but7 = Button(master=wiki, text=titles_search[7], command=lambda: push_bt(titles_search[7]))
+                new_but8 = Button(master=wiki, text=titles_search[8], command=lambda: push_bt(titles_search[8]))
+                new_but9 = Button(master=wiki, text=titles_search[9], command=lambda: push_bt(titles_search[9]))
+
+                self.btns_list = [new_but0, new_but1, new_but2, new_but3, new_but4, new_but5, new_but6, new_but7,
+                                  new_but8, new_but9]
+
+                for next_btn in self.btns_list: next_btn.pack()
 
             else:
                 text_w.insert(1.0, "Not Found, sorry! ")
 
-
-        def wiki_request()->None:
+        def wiki_request() -> None:
             """
             Func to get from wikipedia request titles
             """
             res = entry_search.get().title()
-            if len(res) !=0:
+            if len(res) != 0:
                 self.response_wiki = self.responses.wikipedia(res)
                 print(self.response_wiki)
                 create_bt(self.response_wiki)
 
         # set up wikipedia window
-        wiki= Toplevel()
+        wiki = Toplevel()
         wiki.title("Wikipedia desktop")
         wiki.geometry("1000x800+10+100")
         wiki.config(bg='#363535')
         wiki.minsize(100, 800)
 
         # Label wikipedia
-        Label(master=wiki, text="Search in Wikipedia:", font= 20,
+        Label(master=wiki, text="Search in Wikipedia:", font=20,
               foreground='gold', background='#363535').pack(pady=10)
 
         # input field
-        entry_search = Entry(master=wiki,bg="#1E1D1D", fg='yellow')
+        entry_search = Entry(master=wiki, bg="#1E1D1D", fg='yellow')
         entry_search.pack(padx=100)
 
         # Action
         Button(master=wiki, text='Search', command=wiki_request).pack()
 
         # Text field
-        text_w = Text(master=wiki,width=80, height=100, wrap=WORD, bg="#1E1D1D", fg='yellow', font='ariel', padx=3)
+        text_w = Text(master=wiki, width=80, height=100, wrap=WORD, bg="#1E1D1D", fg='yellow', font='ariel', padx=3)
         text_w.pack(pady=20, side=LEFT)
 
         # found label
-        found_l = Label(master=wiki,text="Found Pages:", font=('Ariel', 25), bg='#363535', padx=150, pady=10)
+        found_l = Label(master=wiki, text="Found Pages:", font=('Ariel', 25), bg='#363535', padx=150, pady=10)
         found_l.pack()
 
-
-    def user_request(self, text:str):
+    def user_request(self, text: str):
         """
         Func processing user requests
         :param text: str
@@ -223,7 +236,8 @@ class Assistant(Tk):
                 self.response_lbl.config(text=response)
 
             # wikipedia request
-            case "search in wikipedia" |"search wikipedia"| "wikipedia"| "wiki":
+            case "search in wikipedia" | "search wikipedia" | "wikipedia" | "wiki":
                 self.create_window_wiki()
             case _:
+                self.response_lbl.config(text="I don't know this command:(")
                 pass
