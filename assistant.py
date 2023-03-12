@@ -77,6 +77,10 @@ class Assistant(Tk):
         # Bind event Enter
         self.entry_text.bind("<Return>", self.callback)
 
+        self.response_wiki = []
+
+        self.status = False
+
         self.mainloop()
 
     def presentation(self) -> None:
@@ -134,25 +138,34 @@ class Assistant(Tk):
 
     def create_window_wiki(self)->None:
 
-        btns_list = []
+        self.btns_list = []
 
-        def push_bt(index):
-            pass
+        def push_bt(title):
+            print(title)
+
+            for b in self.btns_list: b.destroy() # destroy tittle Buttons
+
+            wiki_text=self.responses.wiki_text_answer(title)
+            text_w.insert(1.0, wiki_text)
+
 
         def create_bt(titles_search:list)->None:
             """
             create buttons function and Label
             :param titles_search: list(titles wiki_answer)
             """
-            if len(titles_search) > 0:
+            if self.status:
+                for b in self.btns_list: b.destroy() # destroy tittle Buttons
 
+            self.status= True
+            if len(titles_search) > 0: # check titles response wikipedia
                 for i in range(len(titles_search)):
-                    new_but = Button(master=wiki, text=titles_search[i], command=lambda: push_bt(i))
+                    new_but = Button(master=wiki, text=titles_search[i], command=lambda: push_bt(titles_search[i]))
                     new_but.pack()
-                    btns_list.append(new_but)
+                    self.btns_list.append(new_but)
 
             else:
-                text.insert(1.0, "Not Found, sorry! ")
+                text_w.insert(1.0, "Not Found, sorry! ")
 
 
         def wiki_request()->None:
@@ -160,9 +173,10 @@ class Assistant(Tk):
             Func to get from wikipedia request titles
             """
             res = entry_search.get().title()
-            response_wiki = self.responses.wikipedia(res)
-            print(response_wiki)
-            create_bt(response_wiki)
+            if len(res) !=0:
+                self.response_wiki = self.responses.wikipedia(res)
+                print(self.response_wiki)
+                create_bt(self.response_wiki)
 
         # set up wikipedia window
         wiki= Toplevel()
@@ -183,10 +197,12 @@ class Assistant(Tk):
         Button(master=wiki, text='Search', command=wiki_request).pack()
 
         # Text field
-        text = Text(master=wiki,width=80, height=100, wrap=WORD, bg="#1E1D1D", fg='yellow', font='ariel', padx=3)
-        text.pack(pady=20, side=LEFT)
+        text_w = Text(master=wiki,width=80, height=100, wrap=WORD, bg="#1E1D1D", fg='yellow', font='ariel', padx=3)
+        text_w.pack(pady=20, side=LEFT)
 
-
+        # found label
+        found_l = Label(master=wiki,text="Found Pages:", font=('Ariel', 25), bg='#363535', padx=150, pady=10)
+        found_l.pack()
 
 
     def user_request(self, text:str):
@@ -209,8 +225,5 @@ class Assistant(Tk):
             # wikipedia request
             case "search in wikipedia" |"search wikipedia"| "wikipedia"| "wiki":
                 self.create_window_wiki()
-
-
-                pass
             case _:
                 pass
