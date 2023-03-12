@@ -132,8 +132,65 @@ class Assistant(Tk):
         print(text)
         self.user_request(text)
 
+    def create_window_wiki(self)->None:
 
-    def user_request(self, text):
+        btns_list = []
+
+        def push_bt(index):
+            pass
+
+        def create_bt(titles_search:list)->None:
+            """
+            create buttons function and Label
+            :param titles_search: list(titles wiki_answer)
+
+            """
+            if len(titles_search) > 0:
+
+                for i in range(len(titles_search)):
+                    new_but = Button(master=wiki, text=titles_search[i], command=lambda: push_bt(i))
+                    new_but.pack()
+                    btns_list.append(new_but)
+
+            else:
+                text.insert(1.0, "Not Found, sorry! ")
+
+
+        def wiki_request()->None:
+            """
+            Func to get from wikipedia request titles
+            """
+            res = entry_search.get().title()
+            response_wiki = self.responses.wikipedia(res)
+            print(response_wiki)
+            create_bt(response_wiki)
+
+        # set up wikipedia window
+        wiki= Toplevel()
+        wiki.title("Wikipedia desktop")
+        wiki.geometry("1000x800+10+100")
+        wiki.config(bg='#363535')
+        wiki.minsize(100, 800)
+
+        # Label wikipedia
+        Label(master=wiki, text="Search in Wikipedia:", font= 20,
+              foreground='gold', background='#363535').pack(pady=10)
+
+        # input field
+        entry_search = Entry(master=wiki,bg="#1E1D1D", fg='yellow')
+        entry_search.pack(padx=100)
+
+        # Action
+        Button(master=wiki, text='Search', command=wiki_request).pack()
+
+        # Text field
+        text = Text(master=wiki,width=80, height=100, wrap=WORD, bg="#1E1D1D", fg='yellow', font='ariel', padx=3)
+        text.pack(pady=20, side=LEFT)
+
+
+
+
+    def user_request(self, text:str):
         """
         Func processing user requests
         :param text: str
@@ -149,3 +206,12 @@ class Assistant(Tk):
             case "what's the day today" | "date today" | "date now" | "what's the date today" | "day today":
                 response = self.responses.day_today()
                 self.response_lbl.config(text=response)
+
+            # wikipedia request
+            case "search in wikipedia" |"search wikipedia"| "wikipedia"| "wiki":
+                self.create_window_wiki()
+
+
+                pass
+            case _:
+                pass
