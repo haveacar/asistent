@@ -143,7 +143,6 @@ class Assistant(Tk):
             """
             create buttons function and Label
             :param titles_search: list(titles wiki_answer)
-
             """
             if len(titles_search) > 0:
 
