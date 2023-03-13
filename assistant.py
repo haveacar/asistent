@@ -43,6 +43,7 @@ class Assistant(Tk):
         """
         return new_value == "" or new_value.isnumeric()
 
+
     def start(self) -> None:
         """Start func
         Create labels, place frames, buttons,
@@ -131,7 +132,6 @@ class Assistant(Tk):
         # recognize speech using Google Speech Recognition
         try:
             result = r.recognize_google(audio, show_all=True)
-            # return result
 
         except sr.UnknownValueError:
             self.voice_say_lbl.config(text="Google Speech Recognition could not understand audio")
@@ -152,9 +152,9 @@ class Assistant(Tk):
         CallBack func get str from Entry()
         :param e: e.widget
         """
-        self.text = self.entry_text.get()
-        print(self.text)
-        # self.user_request(self.text)
+        text = self.entry_text.get()
+        print(text)
+        self.user_request(text)
 
     def create_window_wiki(self) -> None:
         """
@@ -324,38 +324,33 @@ class Assistant(Tk):
 
         window_timer.mainloop()
 
+
+
     def user_request(self, text: str):
         """
         Func processing user requests
         :param text: str
         :return:
         """
-        # query = self.voice_input()
-        query = self.text
-        for k, v in commands_list["commands"].items():
-            if query in v:
-                print(k)
-                # print(globals()[k]())
+        match text:
+            # current time now
+            case "what's time now" | "time now":
+                response = self.responses.time_now()
+                self.response_lbl.config(text=response)
 
-        # match text:
-        #     # current time now
-        #     case "what's time now" | "time now":
-        #         response = self.responses.time_now()
-        #         self.response_lbl.config(text=response)
-        #
-        #     # current date now
-        #     case "what's the day today" | "date today" | "date now" | "what's the date today" | "day today":
-        #         response = self.responses.day_today()
-        #         self.response_lbl.config(text=response)
-        #
-        #     # wikipedia request
-        #     case "search in wikipedia" | "search wikipedia" | "wikipedia" | "wiki":
-        #         self.create_window_wiki()
-        #     # timer
-        #     case "timer" | "turn on timer" | "Set timer" | "set a timer":
-        #         self.create_timer_window()
-        #
-        #     case _:
-        #         self.response_lbl.config(text="I don't know this command:(")
-        #         pass
+            # current date now
+            case "what's the day today" | "date today" | "date now" | "what's the date today" | "day today":
+                response = self.responses.day_today()
+                self.response_lbl.config(text=response)
+
+            # wikipedia request
+            case "search in wikipedia" | "search wikipedia" | "wikipedia" | "wiki":
+                self.create_window_wiki()
+            # timer
+            case "timer" | "turn on timer" | "Set timer" | "set a timer":
+                self.create_timer_window()
+
+            case _:
+                self.response_lbl.config(text="I don't know this command:(")
+                pass
 
