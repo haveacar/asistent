@@ -34,6 +34,16 @@ class Assistant(Tk):
         # init class response
         self.responses = Response()
 
+
+    def validate(self, new_value) -> str | int:
+        """
+        validation function int
+        :param new_value: string Entry()
+        :return: "" or int
+        """
+        return new_value == "" or new_value.isnumeric()
+
+
     def start(self) -> None:
         """Start func
         Create labels, place frames, buttons,
@@ -87,6 +97,9 @@ class Assistant(Tk):
         self.flag = False
         self.timer = None
         self.work_min = 1
+
+        # validation numer
+        self.vcmd = (self.register(self.validate), '%P')
 
         self.mainloop()
 
@@ -229,13 +242,13 @@ class Assistant(Tk):
         found_l.pack()
 
     def create_timer_window(self):
+        """Timer Func"""
 
         # Colors Constants
         RED = "#e7305b"
         GREEN = "#9bdeac"
         YELLOW = "#f7f5dd"
         FONT_NAME = "Courier"
-
 
 
         def set_up()->None:
@@ -276,7 +289,7 @@ class Assistant(Tk):
 
                 self.timer = window_timer.after(1000, count_down, count - 1)
             else:
-                print("Stop")
+                messagebox.showinfo("Time !")
 
 
         # set up window
@@ -298,7 +311,7 @@ class Assistant(Tk):
         button_reset = Button(master= window_timer,text="Reset", highlightthickness=0, command=reset_timer)
         button_reset.grid(column=2, row=2)
 
-        entry_setup = Entry(master= window_timer,highlightthickness=0, width=5)
+        entry_setup = Entry(master= window_timer,highlightthickness=0, width=5, validate='key', validatecommand=self.vcmd)
         entry_setup.grid(column=1, row=3)
         button_setup = Button(master= window_timer,text="set up", highlightthickness=0, command=set_up)
         button_setup.grid(column=1, row=4)
