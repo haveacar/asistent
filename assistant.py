@@ -4,6 +4,8 @@ from PIL import ImageTk, Image
 from constans import *
 import speech_recognition as sr
 from response import *
+from tkinter import messagebox
+import math
 
 if __name__ == '__main__':
     sys.exit()
@@ -31,6 +33,14 @@ class Assistant(Tk):
 
         # init class response
         self.responses = Response()
+
+    def validate(self, new_value) -> str | int:
+        """
+        validation function int
+        :param new_value: string Entry()
+        :return: "" or int
+        """
+        return new_value == "" or new_value.isnumeric()
 
     def start(self) -> None:
         """Start func
@@ -77,9 +87,17 @@ class Assistant(Tk):
         # Bind event Enter
         self.entry_text.bind("<Return>", self.callback)
 
+        # wiki
         self.response_wiki = []
-
         self.status = False
+
+        # timer constants
+        self.flag = False
+        self.timer = None
+        self.work_min = 1
+
+        # validation numer
+        self.vcmd = (self.register(self.validate), '%P')
 
         self.mainloop()
 
@@ -188,9 +206,13 @@ class Assistant(Tk):
             """
             res = entry_search.get().title()
             if len(res) != 0:
-                self.response_wiki = self.responses.wikipedia(res)
-                print(self.response_wiki)
-                create_bt(self.response_wiki)
+                try:
+                    self.response_wiki = self.responses.wikipedia(res)
+                except Exception as Err:
+                    messagebox.showerror(f"Ops something wrong:({Err}")
+
+                else:
+                    create_bt(self.response_wiki)
 
         # set up wikipedia window
         wiki = Toplevel()
@@ -218,6 +240,94 @@ class Assistant(Tk):
         found_l = Label(master=wiki, text="Found Pages:", font=('Ariel', 25), bg='#363535', padx=150, pady=10)
         found_l.pack()
 
+    def create_timer_window(self):
+        """Timer Func"""
+
+        # Colors Constants
+        RED = "#e7305b"
+        GREEN = "#9bdeac"
+        YELLOW = "#f7f5dd"
+        FONT_NAME = "Courier"
+
+        def set_up() -> None:
+            """
+            Func set up timer
+            """
+            entry_get = entry_setup.get()
+            if len(entry_get) != 0: self.work_min = int(entry_get)
+
+        def reset_timer() -> None:
+            """ Reset timer func"""
+            if self.flag:
+                button_start.config(state="normal")
+                window_timer.after_cancel(self.timer)
+                canvas.itemconfig(timer_text, text="00:00")
+                my_label_checkmark.config(text="")
+                my_label_timer.config(text="Timer", fg=GREEN)
+
+        def start_timer() -> None:
+            """Start timer func"""
+            self.flag = True
+            button_start.config(state="disabled")
+            work_sec = self.work_min * 60
+            my_label_timer.config(text="Timer work!", fg=RED)
+            count_down(work_sec)
+
+        def count_down(count: int) -> None:
+            """
+            Count func sec
+            :param count: int sec
+            """
+
+            count_min = math.floor(count / 60)
+            count_sec = count % 60
+            if count_sec < 10:
+                count_sec = f"0{count_sec}"
+
+            canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
+            if count > 0:
+
+                self.timer = window_timer.after(1000, count_down, count - 1)
+            else:
+                messagebox.showinfo("Time !")
+
+        # set up window
+        window_timer = Toplevel()
+        window_timer.title("Timer")
+        window_timer.config(padx=100, pady=50, bg=YELLOW)
+        window_timer.resizable(False, False)
+
+        # Labels & Buttons
+        my_label_timer = Label(master=window_timer, text="Timer", font=("Algerian", 50), fg=GREEN, bg=YELLOW)
+        my_label_timer.grid(column=1, row=0)
+
+        my_label_checkmark = Label(master=window_timer, fg=GREEN, bg=YELLOW, font=("Arial", 20))
+        my_label_checkmark.grid(column=1, row=3)
+
+        button_start = Button(master=window_timer, text="Start", highlightthickness=0, command=start_timer,
+                              highlightbackground=YELLOW)
+        button_start.grid(column=0, row=2)
+
+        button_reset = Button(master=window_timer, text="Reset", highlightthickness=0, command=reset_timer,
+                              highlightbackground=YELLOW)
+        button_reset.grid(column=2, row=2)
+
+        entry_setup = Entry(master=window_timer, highlightthickness=0, width=5, validate='key',
+                            validatecommand=self.vcmd)
+        entry_setup.grid(column=1, row=3)
+
+        button_setup = Button(master=window_timer, text="set up", highlightthickness=0, command=set_up,
+                              highlightbackground=YELLOW)
+        button_setup.grid(column=1, row=4)
+
+        canvas = Canvas(master=window_timer, width=200, height=224, bg=YELLOW, highlightthickness=0)
+        tomato_img = PhotoImage(file=TIMER_PATH)
+        canvas.create_image(100, 112, image=tomato_img)
+        timer_text = canvas.create_text(100, 130, text="00:00", fill="white", font=(FONT_NAME, 35, "bold"))
+        canvas.grid(column=1, row=1)
+
+        window_timer.mainloop()
+
     def user_request(self, text: str):
         """
         Func processing user requests
@@ -238,6 +348,10 @@ class Assistant(Tk):
             # wikipedia request
             case "search in wikipedia" | "search wikipedia" | "wikipedia" | "wiki":
                 self.create_window_wiki()
+            # timer
+            case "timer" | "turn on timer" | "Set timer" | "set a timer":
+                self.create_timer_window()
+
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
                 pass
