@@ -241,9 +241,12 @@ class Assistant(Tk):
 
 
 
-        def set_up():
-
-            self.work_min = int(entry_setup.get())
+        def set_up()->None:
+            """
+            Func set up timer
+            """
+            entry_get=entry_setup.get()
+            if len(entry_get) != 0: self.work_min = int(entry_get)
 
         def reset_timer():
             if self.flag:
