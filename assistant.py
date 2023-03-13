@@ -34,7 +34,6 @@ class Assistant(Tk):
         # init class response
         self.responses = Response()
 
-
     def validate(self, new_value) -> str | int:
         """
         validation function int
@@ -42,7 +41,6 @@ class Assistant(Tk):
         :return: "" or int
         """
         return new_value == "" or new_value.isnumeric()
-
 
     def start(self) -> None:
         """Start func
@@ -210,10 +208,11 @@ class Assistant(Tk):
             if len(res) != 0:
                 try:
                     self.response_wiki = self.responses.wikipedia(res)
-                except Exception as  Err:
+                except Exception as Err:
                     messagebox.showerror(f"Ops something wrong:({Err}")
 
-                else:create_bt(self.response_wiki)
+                else:
+                    create_bt(self.response_wiki)
 
         # set up wikipedia window
         wiki = Toplevel()
@@ -250,15 +249,14 @@ class Assistant(Tk):
         YELLOW = "#f7f5dd"
         FONT_NAME = "Courier"
 
-
-        def set_up()->None:
+        def set_up() -> None:
             """
             Func set up timer
             """
-            entry_get=entry_setup.get()
+            entry_get = entry_setup.get()
             if len(entry_get) != 0: self.work_min = int(entry_get)
 
-        def reset_timer():
+        def reset_timer() -> None:
             """ Reset timer func"""
             if self.flag:
                 window_timer.after_cancel(self.timer)
@@ -266,14 +264,14 @@ class Assistant(Tk):
                 my_label_checkmark.config(text="")
                 my_label_timer.config(text="Timer", fg=GREEN)
 
-        def start_timer()->None:
+        def start_timer() -> None:
             """Start timer func"""
             self.flag = True
             work_sec = self.work_min * 60
             my_label_timer.config(text="Timer work!", fg=RED)
             count_down(work_sec)
 
-        def count_down(count:int)->None:
+        def count_down(count: int) -> None:
             """
             Count func sec
             :param count: int sec
@@ -291,7 +289,6 @@ class Assistant(Tk):
             else:
                 messagebox.showinfo("Time !")
 
-
         # set up window
         window_timer = Toplevel()
         window_timer.title("Timer")
@@ -299,32 +296,31 @@ class Assistant(Tk):
         window_timer.resizable(False, False)
 
         # Labels & Buttons
-        my_label_timer = Label(master= window_timer,text="Timer", font=("Algerian", 50), fg=GREEN, bg=YELLOW)
+        my_label_timer = Label(master=window_timer, text="Timer", font=("Algerian", 50), fg=GREEN, bg=YELLOW)
         my_label_timer.grid(column=1, row=0)
 
-        my_label_checkmark = Label(master= window_timer,fg=GREEN, bg=YELLOW, font=("Arial", 20))
+        my_label_checkmark = Label(master=window_timer, fg=GREEN, bg=YELLOW, font=("Arial", 20))
         my_label_checkmark.grid(column=1, row=3)
 
-        button_start = Button(master= window_timer,text="Start", highlightthickness=0, command=start_timer)
+        button_start = Button(master=window_timer, text="Start", highlightthickness=0, command=start_timer)
         button_start.grid(column=0, row=2)
 
-        button_reset = Button(master= window_timer,text="Reset", highlightthickness=0, command=reset_timer)
+        button_reset = Button(master=window_timer, text="Reset", highlightthickness=0, command=reset_timer)
         button_reset.grid(column=2, row=2)
 
-        entry_setup = Entry(master= window_timer,highlightthickness=0, width=5, validate='key', validatecommand=self.vcmd)
+        entry_setup = Entry(master=window_timer, highlightthickness=0, width=5, validate='key',
+                            validatecommand=self.vcmd)
         entry_setup.grid(column=1, row=3)
-        button_setup = Button(master= window_timer,text="set up", highlightthickness=0, command=set_up)
+        button_setup = Button(master=window_timer, text="set up", highlightthickness=0, command=set_up)
         button_setup.grid(column=1, row=4)
 
-        canvas = Canvas(master= window_timer,width=200, height=224, bg=YELLOW, highlightthickness=0)
+        canvas = Canvas(master=window_timer, width=200, height=224, bg=YELLOW, highlightthickness=0)
         tomato_img = PhotoImage(file=TIMER_PATH)
         canvas.create_image(100, 112, image=tomato_img)
         timer_text = canvas.create_text(100, 130, text="00:00", fill="white", font=(FONT_NAME, 35, "bold"))
         canvas.grid(column=1, row=1)
 
         window_timer.mainloop()
-
-
 
     def user_request(self, text: str):
         """
@@ -353,4 +349,3 @@ class Assistant(Tk):
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
                 pass
-
