@@ -230,10 +230,7 @@ class Assistant(Tk):
 
     def create_timer_window(self):
 
-
-
-        # ---------------------------- CONSTANTS ------------------------------- #
-        PINK = "#e2979c"
+        # Colors Constants
         RED = "#e7305b"
         GREEN = "#9bdeac"
         YELLOW = "#f7f5dd"
@@ -249,22 +246,26 @@ class Assistant(Tk):
             if len(entry_get) != 0: self.work_min = int(entry_get)
 
         def reset_timer():
+            """ Reset timer func"""
             if self.flag:
                 window_timer.after_cancel(self.timer)
                 canvas.itemconfig(timer_text, text="00:00")
                 my_label_checkmark.config(text="")
                 my_label_timer.config(text="Timer", fg=GREEN)
 
-        # ---------------------------- TIMER MECHANISM ------------------------------- #
-        def start_timer():
-
+        def start_timer()->None:
+            """Start timer func"""
             self.flag = True
             work_sec = self.work_min * 60
             my_label_timer.config(text="Timer work!", fg=RED)
             count_down(work_sec)
 
-        # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
-        def count_down(count):
+        def count_down(count:int)->None:
+            """
+            Count func sec
+            :param count: int sec
+            """
+
             count_min = math.floor(count / 60)
             count_sec = count % 60
             if count_sec < 10:
@@ -277,13 +278,14 @@ class Assistant(Tk):
             else:
                 print("Stop")
 
-        # ---------------------------- UI SETUP ------------------------------- #
 
+        # set up window
         window_timer = Toplevel()
-        window_timer.title("Pomodoro")
+        window_timer.title("Timer")
         window_timer.config(padx=100, pady=50, bg=YELLOW)
         window_timer.resizable(False, False)
 
+        # Labels & Buttons
         my_label_timer = Label(master= window_timer,text="Timer", font=("Algerian", 50), fg=GREEN, bg=YELLOW)
         my_label_timer.grid(column=1, row=0)
 
