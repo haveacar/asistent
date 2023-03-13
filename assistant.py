@@ -259,6 +259,7 @@ class Assistant(Tk):
         def reset_timer() -> None:
             """ Reset timer func"""
             if self.flag:
+                button_start.config(state="normal")
                 window_timer.after_cancel(self.timer)
                 canvas.itemconfig(timer_text, text="00:00")
                 my_label_checkmark.config(text="")
@@ -267,6 +268,7 @@ class Assistant(Tk):
         def start_timer() -> None:
             """Start timer func"""
             self.flag = True
+            button_start.config(state="disabled")
             work_sec = self.work_min * 60
             my_label_timer.config(text="Timer work!", fg=RED)
             count_down(work_sec)
@@ -302,16 +304,20 @@ class Assistant(Tk):
         my_label_checkmark = Label(master=window_timer, fg=GREEN, bg=YELLOW, font=("Arial", 20))
         my_label_checkmark.grid(column=1, row=3)
 
-        button_start = Button(master=window_timer, text="Start", highlightthickness=0, command=start_timer)
+        button_start = Button(master=window_timer, text="Start", highlightthickness=0, command=start_timer,
+                              highlightbackground=YELLOW)
         button_start.grid(column=0, row=2)
 
-        button_reset = Button(master=window_timer, text="Reset", highlightthickness=0, command=reset_timer)
+        button_reset = Button(master=window_timer, text="Reset", highlightthickness=0, command=reset_timer,
+                              highlightbackground=YELLOW)
         button_reset.grid(column=2, row=2)
 
         entry_setup = Entry(master=window_timer, highlightthickness=0, width=5, validate='key',
                             validatecommand=self.vcmd)
         entry_setup.grid(column=1, row=3)
-        button_setup = Button(master=window_timer, text="set up", highlightthickness=0, command=set_up)
+
+        button_setup = Button(master=window_timer, text="set up", highlightthickness=0, command=set_up,
+                              highlightbackground=YELLOW)
         button_setup.grid(column=1, row=4)
 
         canvas = Canvas(master=window_timer, width=200, height=224, bg=YELLOW, highlightthickness=0)
