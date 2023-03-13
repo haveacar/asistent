@@ -4,7 +4,7 @@ from PIL import ImageTk, Image
 from constans import *
 import speech_recognition as sr
 from response import *
-
+from tkinter import messagebox
 if __name__ == '__main__':
     sys.exit()
 
@@ -188,9 +188,12 @@ class Assistant(Tk):
             """
             res = entry_search.get().title()
             if len(res) != 0:
-                self.response_wiki = self.responses.wikipedia(res)
-                print(self.response_wiki)
-                create_bt(self.response_wiki)
+                try:
+                    self.response_wiki = self.responses.wikipedia(res)
+                except Exception as  Err:
+                    messagebox.showerror(f"Ops something wrong:({Err}")
+
+                else:create_bt(self.response_wiki)
 
         # set up wikipedia window
         wiki = Toplevel()
