@@ -35,6 +35,9 @@ class Assistant(Tk):
         # init class response
         self.responses = Response()
 
+        self.btn_log = Button(text="LOGIN", command=self.login)
+
+
     def validate(self, new_value) -> str | int:
         """
         validation function int
@@ -51,6 +54,7 @@ class Assistant(Tk):
         self.top_frame.pack(side=TOP)
         self.central_frame.pack(side=TOP, pady=20)
         self.bottom_frame.pack(side=BOTTOM, pady=20)
+        self.btn_log.pack()
 
         # load voice image
         with Image.open(VOICE_PATH) as img:
@@ -403,11 +407,54 @@ class Assistant(Tk):
         # song = AudioSegment.from_mp3(file="sound.mp3")
         # play(song)
 
+    def login(self):
+
+        def log_in():
+            print("LOG_IN")
+
+        def sign_up():
+            print("SIGN_UP")
+
+
+        login_root = Toplevel()
+        login_root.title("Your account")
+        login_root.geometry("400x400")
+        login_root.resizable(False, False)
+
+        # labels
+        email_lbl = Label(master=login_root, text="Your E-mail or phone")
+        email_lbl.pack()
+        
+        # Buttons
+        btn_sign_up = Button(master=login_root, text="Create account", command=sign_up)
+        btn_sign_up.pack(side=BOTTOM, pady=10)
+        btn_forgot_pass = Button(master=login_root, text="Forgot a password?", command=log_in)
+        btn_forgot_pass.pack(side=BOTTOM, pady=20)
+
+
+
+        # Entry
+        entry_login = Entry(master=login_root)
+        entry_login.pack()
+
+        passw_lbl = Label(master=login_root, text="Password")
+        passw_lbl.pack()
+
+        entry_password = Entry(master=login_root, show="*")
+        entry_password.pack()
+
+        btn_log_in = Button(master=login_root, text="Log in")
+        btn_log_in.pack()
+
+        login_root.mainloop()
+        
     def user_request(self, text: str):
+
         """
         Func processing user requests
         :param text: str
         """
+
         match text.lower():
             # current time now
             case "what's time now" | "time now":
@@ -436,4 +483,3 @@ class Assistant(Tk):
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
                 pass
-# last commit before delete

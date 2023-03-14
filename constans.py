@@ -20,12 +20,13 @@ GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
 
-commands_list = {
+commands_dict = {
     "commands": {
         "time_now": ["what's time now", "time now"],
         "day_today":["what's the day today","date today","date now", "what's the date today", "day today"],
         "create_window_wiki": ["search in wikipedia", "search wikipedia", "wikipedia", "wiki"],
-        "create_timer_window":["timer", "turn on timer", "Set timer", "set a timer"]
+        'create_timer_window':["timer", "turn on timer", "Set timer", "set a timer"],
+        'play_sound':['sound']
 
     }
 }
