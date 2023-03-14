@@ -352,6 +352,8 @@ class Assistant(Tk):
             case "timer" | "turn on timer" | "Set timer" | "set a timer":
                 self.create_timer_window()
 
+            # not found case
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
                 pass
+#
