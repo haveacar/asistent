@@ -100,7 +100,7 @@ class Assistant(Tk):
         self.vcmd = (self.register(self.validate), '%P')
 
         # stopwatch constans
-        self.flag_w=False
+        self.flag_w = False
 
         self.mainloop()
 
@@ -324,12 +324,11 @@ class Assistant(Tk):
         canvas.grid(column=1, row=1)
 
         window_timer.mainloop()
-        
+
     def create_stopwatch_window(self):
 
-        start_w =0
+        start_w = 0
         self.timer_w = None
-
 
         def reset_watch() -> None:
             """ Reset stopwatch func"""
@@ -386,7 +385,9 @@ class Assistant(Tk):
                               highlightbackground=YELLOW)
         button_reset.grid(column=2, row=2)
 
-
+        button_pause = Button(master=stopwatch, text="Pause", highlightthickness=0,
+                              highlightbackground=YELLOW)
+        button_pause.grid(column=1, row=4)
 
         canvas = Canvas(master=stopwatch, width=200, height=224, bg=YELLOW, highlightthickness=0)
         tomato_img = PhotoImage(file=TIMER_PATH)
@@ -395,8 +396,6 @@ class Assistant(Tk):
         canvas.grid(column=1, row=1)
 
         stopwatch.mainloop()
-        
-    
 
     def user_request(self, text: str):
         """
@@ -422,11 +421,10 @@ class Assistant(Tk):
                 self.create_timer_window()
 
             # stopwatch
-            case "stopwatch"| "turn on stopwatch" | "Set stopwatch" | "set up stopwatch":
+            case "stopwatch" | "turn on stopwatch" | "Set stopwatch" | "set up stopwatch":
                 self.create_stopwatch_window()
 
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
                 pass
-
-
+# last commit before delete
