@@ -99,6 +99,9 @@ class Assistant(Tk):
         # validation numer
         self.vcmd = (self.register(self.validate), '%P')
 
+        # stopwatch constans
+        self.flag_w=False
+
         self.mainloop()
 
     def presentation(self) -> None:
@@ -321,12 +324,84 @@ class Assistant(Tk):
         canvas.grid(column=1, row=1)
 
         window_timer.mainloop()
+        
+    def create_stopwatch_window(self):
+
+        start_w =0
+        self.timer_w = None
+
+
+        def reset_watch() -> None:
+            """ Reset stopwatch func"""
+            if self.flag_w:
+                button_start.config(state="normal")
+                stopwatch.after_cancel(self.timer_w)
+                canvas.itemconfig(timer_text, text="00:00")
+                my_label_checkmark.config(text="")
+                my_label_timer.config(text="StopWatch", fg=GREEN)
+
+        def start_watch() -> None:
+            """Start watch func"""
+            self.flag_w = True
+            button_start.config(state="disabled")
+            work_sec = start_w * 60
+            my_label_timer.config(text="Work!", fg=RED)
+            count_up(work_sec)
+
+        def count_up(count: int) -> None:
+            """
+            Count func sec
+            :param count: int sec
+            """
+            count_min = math.floor(count / 60)
+            count_sec = count % 60
+            if count_sec < 10:
+                count_sec = f"0{count_sec}"
+
+            canvas.itemconfig(timer_text, text=f"{count_min}:{count_sec}")
+            if count >= 0:
+
+                self.timer_w = stopwatch.after(1000, count_up, count + 1)
+            else:
+                print("pause")
+
+        # set up window
+        stopwatch = Toplevel()
+        stopwatch.title("StopWatch")
+        stopwatch.config(padx=100, pady=50, bg=YELLOW)
+        stopwatch.resizable(False, False)
+
+        # Labels & Buttons
+        my_label_timer = Label(master=stopwatch, text="StopWatch", font=("Algerian", 50), fg=GREEN, bg=YELLOW)
+        my_label_timer.grid(column=1, row=0)
+
+        my_label_checkmark = Label(master=stopwatch, fg=GREEN, bg=YELLOW, font=("Arial", 20))
+        my_label_checkmark.grid(column=1, row=3)
+
+        button_start = Button(master=stopwatch, text="Start", highlightthickness=0, command=start_watch,
+                              highlightbackground=YELLOW)
+        button_start.grid(column=0, row=2)
+
+        button_reset = Button(master=stopwatch, text="Reset", highlightthickness=0, command=reset_watch,
+                              highlightbackground=YELLOW)
+        button_reset.grid(column=2, row=2)
+
+
+
+        canvas = Canvas(master=stopwatch, width=200, height=224, bg=YELLOW, highlightthickness=0)
+        tomato_img = PhotoImage(file=TIMER_PATH)
+        canvas.create_image(100, 112, image=tomato_img)
+        timer_text = canvas.create_text(100, 130, text="00:00", fill="white", font=(FONT_NAME, 35, "bold"))
+        canvas.grid(column=1, row=1)
+
+        stopwatch.mainloop()
+        
+    
 
     def user_request(self, text: str):
         """
         Func processing user requests
         :param text: str
-        :return:
         """
         match text.lower():
             # current time now
@@ -343,8 +418,12 @@ class Assistant(Tk):
             case "search in wikipedia" | "search wikipedia" | "wikipedia" | "wiki":
                 self.create_window_wiki()
             # timer
-            case "timer" | "turn on timer" | "Set timer" | "set a timer":
+            case "timer" | "turn on timer" | "Set timer" | "set up timer":
                 self.create_timer_window()
+
+            # stopwatch
+            case "stopwatch"| "turn on stopwatch" | "Set stopwatch" | "set up stopwatch":
+                self.create_stopwatch_window()
 
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
