@@ -243,12 +243,6 @@ class Assistant(Tk):
     def create_timer_window(self):
         """Timer Func"""
 
-        # Colors Constants
-        RED = "#e7305b"
-        GREEN = "#9bdeac"
-        YELLOW = "#f7f5dd"
-        FONT_NAME = "Courier"
-
         def set_up() -> None:
             """
             Func set up timer
@@ -357,4 +351,3 @@ class Assistant(Tk):
                 pass
 
 
-##

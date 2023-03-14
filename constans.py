@@ -12,6 +12,14 @@ IMAGE_PATH = os.path.join(DIR_PATH, 'voice bg.jpg')
 TIMER_PATH = os.path.join(DIR_PATH, 'tomato.png')
 TIMER_PATH = os.path.join(DIR_PATH, 'tomato.png')
 
+
+
+# Colors Constants
+RED = "#e7305b"
+GREEN = "#9bdeac"
+YELLOW = "#f7f5dd"
+FONT_NAME = "Courier"
+
 commands_list = {
     "commands": {
         "time_now": ["what's time now", "time now"],
