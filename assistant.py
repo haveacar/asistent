@@ -355,3 +355,6 @@ class Assistant(Tk):
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
                 pass
+
+
+##
