@@ -6,6 +6,7 @@ import speech_recognition as sr
 from response import *
 from tkinter import messagebox
 import math
+from playsound import playsound
 
 if __name__ == '__main__':
     sys.exit()
@@ -397,6 +398,11 @@ class Assistant(Tk):
 
         stopwatch.mainloop()
 
+    def play_sound(self):
+        playsound("sounds/sound.mp3")
+        # song = AudioSegment.from_mp3(file="sound.mp3")
+        # play(song)
+
     def user_request(self, text: str):
         """
         Func processing user requests
@@ -423,6 +429,9 @@ class Assistant(Tk):
             # stopwatch
             case "stopwatch" | "turn on stopwatch" | "Set stopwatch" | "set up stopwatch":
                 self.create_stopwatch_window()
+
+            case "sound":
+                self.play_sound()
 
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
