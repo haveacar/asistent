@@ -334,7 +334,7 @@ class Assistant(Tk):
         :param text: str
         :return:
         """
-        match text:
+        match text.lower():
             # current time now
             case "what's time now" | "time now":
                 response = self.responses.time_now()
@@ -346,12 +346,14 @@ class Assistant(Tk):
                 self.response_lbl.config(text=response)
 
             # wikipedia request
-            case "search in wikipedia" | "search wikipedia" | "wikipedia" | "wiki":
+            case "wikipedia"|"search in wikipedia" | "search wikipedia" | "wiki":
                 self.create_window_wiki()
             # timer
             case "timer" | "turn on timer" | "Set timer" | "set a timer":
                 self.create_timer_window()
 
+            # not found case
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
                 pass
+#
