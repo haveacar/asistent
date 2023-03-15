@@ -20,6 +20,9 @@ GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
 
+
+
+
 commands_list = {
     "commands": {
         "time_now": ["what's time now", "time now"],
