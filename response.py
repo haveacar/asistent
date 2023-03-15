@@ -107,6 +107,9 @@ class Response():
             return rates
 
 
+        rates = reload_rates()
+
+
 # for tests functions !
 
 #responses = Response()
