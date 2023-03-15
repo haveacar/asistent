@@ -4,6 +4,8 @@ import time
 import os, json, requests
 import sys
 from datetime import datetime
+from constans import *
+
 class Response():
 
     """ User response class"""
@@ -58,9 +60,7 @@ class Response():
 
 
     def currency_convector(self):
-        # api key and request url
-        API_KEY = "c66xOBOerxjgjCqRfbT3MzvIIqMoDm6e"
-        REQUEST_URL = "https://api.apilayer.com/fixer/latest?base=USD"
+
 
         def receive_data():
             """
@@ -76,7 +76,37 @@ class Response():
             except:
                 return False
 
-        pass
+        def reload_rates() -> dict:
+            """
+            Func Reload_data checks date from file
+            if date!= date.now try upload
+            :return: dict (rates)
+            """
+            rates = {}
+            time_now = datetime.now().strftime("%Y-%m-%d")
+            # open rates from file
+            with open(os.path.join(CURRENT_PATCH_JASON, "data_rates.json")) as f:
+                rates_from_file = json.load(f)
+            rates = rates_from_file
+
+            # check from file current date
+            if rates_from_file.get("date") != time_now:
+                print("Uploading Data")
+                rates = receive_data()
+
+                # cannot receive data
+                if rates == False:
+                    print("Cannot update")
+                    rates = rates_from_file
+                else:
+                    print("Uploading successful")
+                    # create file
+                    with open(os.path.join(CURRENT_PATCH_JASON, "data_rates.json"), "w") as f:
+                        json.dump(rates, f, indent=4)
+                        pass
+            return rates
+
+
 # for tests functions !
 
 #responses = Response()

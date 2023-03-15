@@ -10,7 +10,7 @@ DIR_PATH = os.path.join(os.path.dirname(__file__), 'img')
 VOICE_PATH = os.path.join(DIR_PATH, 'voice2.jpeg')
 IMAGE_PATH = os.path.join(DIR_PATH, 'voice bg.jpg')
 TIMER_PATH = os.path.join(DIR_PATH, 'tomato.png')
-TIMER_PATH = os.path.join(DIR_PATH, 'tomato.png')
+CURRENT_PATCH_JASON = os.path.join(DIR_PATH, "statics")
 
 
 
@@ -20,6 +20,10 @@ GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
 
+
+# api key and request url
+API_KEY = "c66xOBOerxjgjCqRfbT3MzvIIqMoDm6e"
+REQUEST_URL = "https://api.apilayer.com/fixer/latest?base=USD"
 
 
 
