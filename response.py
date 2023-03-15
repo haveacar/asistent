@@ -2,7 +2,7 @@ import wikipedia
 from wikipedia import WikipediaException
 import time
 
-class Response:
+class Response():
 
     """ User response class"""
     def __init__(self):
@@ -54,6 +54,7 @@ class Response:
             response = f"Not found Page:{text}, try another request"
 
         return  response
+
 
 # for tests functions !
 
