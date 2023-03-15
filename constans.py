@@ -10,7 +10,9 @@ DIR_PATH = os.path.join(os.path.dirname(__file__), 'img')
 VOICE_PATH = os.path.join(DIR_PATH, 'voice2.jpeg')
 IMAGE_PATH = os.path.join(DIR_PATH, 'voice bg.jpg')
 TIMER_PATH = os.path.join(DIR_PATH, 'tomato.png')
-CURRENT_PATCH_JASON = os.path.join(DIR_PATH, "statics")
+
+CURRENT_PATH = os.path.dirname(__file__)
+CURRENT_PATCH_JASON = os.path.join(CURRENT_PATH, "static")
 
 
 

@@ -99,8 +99,11 @@ class Assistant(Tk):
         # validation numer
         self.vcmd = (self.register(self.validate), '%P')
 
-        # stopwatch constans
+        # stopwatch constants
         self.flag_w = False
+
+        #currency constants
+        self.favorite_rates = ["USD", "UAH", "EUR", "PLN", "RON", "HUF", "ILS"]
 
         self.mainloop()
 
@@ -397,6 +400,22 @@ class Assistant(Tk):
 
         stopwatch.mainloop()
 
+
+    def currency(self):
+        """Func Currency Converter"""
+        self.responses.currency_convector(self.favorite_rates)
+
+        # set up window
+        window_currency = Toplevel()
+        window_currency.title("Currency Convector")
+        window_currency.geometry("300x600+800+100")
+        window_currency.config(bg=YELLOW)
+        window_currency.resizable(False, False)
+
+        window_currency.mainloop()
+
+
+
     def user_request(self, text: str):
         """
         Func processing user requests
@@ -423,7 +442,9 @@ class Assistant(Tk):
             # stopwatch
             case "stopwatch" | "turn on stopwatch" | "Set stopwatch" | "set up stopwatch":
                 self.create_stopwatch_window()
-
+            # currency
+            case "currency" | "currency convector" | "currency today":
+                self.currency()
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
                 pass

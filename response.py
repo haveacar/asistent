@@ -1,12 +1,11 @@
 import wikipedia
 from wikipedia import WikipediaException
 import time
-import os, json, requests
-import sys
+import  json, requests
 from datetime import datetime
 from constans import *
 
-class Response():
+class Response:
 
     """ User response class"""
     def __init__(self):
@@ -59,8 +58,7 @@ class Response():
         return  response
 
 
-    def currency_convector(self):
-
+    def currency_convector(self,f_rates):
 
         def receive_data():
             """
@@ -107,7 +105,17 @@ class Response():
             return rates
 
 
-        rates = reload_rates()
+        all_rates = reload_rates()
+
+        # create dict favorite rates
+        dict_favorite_rates = dict.fromkeys(f_rates, 0)
+
+        for next_key in f_rates:
+            dict_favorite_rates[next_key] = all_rates.get("rates").get(next_key)
+
+        return dict_favorite_rates
+
+
 
 
 # for tests functions !
