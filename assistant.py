@@ -37,7 +37,6 @@ class Assistant(Tk):
 
         self.btn_log = Button(text="LOGIN", command=self.login)
 
-
     def validate(self, new_value) -> str | int:
         """
         validation function int
@@ -408,7 +407,7 @@ class Assistant(Tk):
         # play(song)
 
     def login(self):
-
+        bg = "#FF7F50"
         def log_in():
             print("LOG_IN")
 
@@ -416,35 +415,32 @@ class Assistant(Tk):
             print("SIGN_UP")
 
 
-        login_root = Toplevel()
+        login_root = Toplevel(bg=bg)
         login_root.title("Your account")
-        login_root.geometry("400x400")
+        login_root.geometry("450x400")
         login_root.resizable(False, False)
 
         # labels
-        email_lbl = Label(master=login_root, text="Your E-mail or phone")
-        email_lbl.pack()
-        
+        email_lbl = Label(master=login_root, text="Your E-mail or phone", bg=bg)
+        passw_lbl = Label(master=login_root, text="Password", bg=bg)
+
         # Buttons
-        btn_sign_up = Button(master=login_root, text="Create account", command=sign_up)
-        btn_sign_up.pack(side=BOTTOM, pady=10)
-        btn_forgot_pass = Button(master=login_root, text="Forgot a password?", command=log_in)
-        btn_forgot_pass.pack(side=BOTTOM, pady=20)
-
-
+        btn_sign_up = Button(master=login_root, text="Create account", command=sign_up, bg=bg)
+        btn_forgot_pass = Button(master=login_root, text="Forgot a password?", command=log_in, bg=bg)
+        btn_log_in = Button(master=login_root, text="Log in", bg=bg)
 
         # Entry
         entry_login = Entry(master=login_root)
-        entry_login.pack()
-
-        passw_lbl = Label(master=login_root, text="Password")
-        passw_lbl.pack()
-
         entry_password = Entry(master=login_root, show="*")
-        entry_password.pack()
 
-        btn_log_in = Button(master=login_root, text="Log in")
-        btn_log_in.pack()
+        # Grid
+        email_lbl.grid()
+        btn_sign_up.grid(column=1, row=6)
+        btn_forgot_pass.grid(column=1, row=5)
+        btn_log_in.grid(column=1, row=4)
+        entry_login.grid(column=1, row=1)
+        entry_password.grid(column=1, row=2)
+        passw_lbl.grid(column=1, row=3)
 
         login_root.mainloop()
         
