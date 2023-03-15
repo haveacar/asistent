@@ -6,6 +6,7 @@ import speech_recognition as sr
 from response import *
 from tkinter import messagebox
 import math
+from tkinter.ttk import Combobox, Style
 
 if __name__ == '__main__':
     sys.exit()
@@ -102,7 +103,7 @@ class Assistant(Tk):
         # stopwatch constants
         self.flag_w = False
 
-        #currency constants
+        # currency constants
         self.favorite_rates = ["USD", "UAH", "EUR", "PLN", "RON", "HUF", "ILS"]
 
         self.mainloop()
@@ -400,21 +401,41 @@ class Assistant(Tk):
 
         stopwatch.mainloop()
 
-
     def currency(self):
         """Func Currency Converter"""
-        self.responses.currency_convector(self.favorite_rates)
+
+        # collect actual favorite rates
+        dict_favorite_rates = self.responses.currency_convector(self.favorite_rates)
+
 
         # set up window
         window_currency = Toplevel()
         window_currency.title("Currency Convector")
-        window_currency.geometry("300x600+800+100")
+        window_currency.geometry("600x500+800+100")
         window_currency.config(bg=YELLOW)
         window_currency.resizable(False, False)
 
+        # Labels
+        Label(master=window_currency, text="Currency Converter", font=(FONT_NAME, 30, "bold")).grid(row=0, columnspan=2)
+
+        first_rate_entry = Entry(master=window_currency, width=10, font=(FONT_NAME, 25, "bold"), bg=YELLOW, fg="black",
+                                 validate='key',
+                                 validatecommand=self.vcmd)
+        first_rate_entry.grid(row=1, column=0, padx=10)
+
+        second_rate_entry = Label(master=window_currency, text="0", font=(FONT_NAME, 25, "bold"), bg=YELLOW, fg="black")
+        second_rate_entry.grid(row=2, column=0, padx=10)
+
+        # combox
+        first_combo = Combobox(master=window_currency, values=self.favorite_rates)
+        first_combo.grid(row=1, column=1, padx=10)
+
+        second_combo = Combobox(master=window_currency, values=self.favorite_rates)
+        second_combo.grid(row=2, column=1, padx=10)
+
+
+
         window_currency.mainloop()
-
-
 
     def user_request(self, text: str):
         """
