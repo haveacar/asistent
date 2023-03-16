@@ -403,35 +403,61 @@ class Assistant(Tk):
 
     def currency(self):
         """Func Currency Converter"""
-
         # collect actual favorite rates
         dict_favorite_rates = self.responses.currency_convector(self.favorite_rates)
+
+        def convector():
+            # take user input keys and amount
+            user_input_first=first_combo.get()
+            user_input_second=second_combo.get()
+            amount = first_rate_entry.get()
+
+            # converter if choice==USD
+            if user_input_first == "USD":
+                result = int(amount) * int(dict_favorite_rates.get(user_input_second))
+                second_rate.config(text=result)
+
+                # converter if choice!=USD
+            else:
+                result=int(amount)* int(dict_favorite_rates.get(user_input_second))/int(dict_favorite_rates.get(user_input_first))
+                second_rate.config(text=result)
+
+
+
 
 
         # set up window
         window_currency = Toplevel()
         window_currency.title("Currency Convector")
-        window_currency.geometry("600x500+800+100")
+        window_currency.geometry("500x400+800+100")
         window_currency.config(bg=YELLOW)
         window_currency.resizable(False, False)
 
+
         # Labels
-        Label(master=window_currency, text="Currency Converter", font=(FONT_NAME, 30, "bold")).grid(row=0, columnspan=2)
+        Label(master=window_currency, text="Currency Converter", font=(FONT_NAME, 30, "bold")).grid(row=0, columnspan=2, pady=10)
 
         first_rate_entry = Entry(master=window_currency, width=10, font=(FONT_NAME, 25, "bold"), bg=YELLOW, fg="black",
                                  validate='key',
                                  validatecommand=self.vcmd)
         first_rate_entry.grid(row=1, column=0, padx=10)
 
-        second_rate_entry = Label(master=window_currency, text="0", font=(FONT_NAME, 25, "bold"), bg=YELLOW, fg="black")
-        second_rate_entry.grid(row=2, column=0, padx=10)
+        second_rate = Label(master=window_currency, text="0", font=(FONT_NAME, 25, "bold"), bg=YELLOW, fg="black")
+        second_rate.grid(row=2, column=0, padx=10)
 
         # combox
         first_combo = Combobox(master=window_currency, values=self.favorite_rates)
-        first_combo.grid(row=1, column=1, padx=10)
+        first_combo.grid(row=1, column=1, padx=10, pady=2)
 
         second_combo = Combobox(master=window_currency, values=self.favorite_rates)
-        second_combo.grid(row=2, column=1, padx=10)
+        second_combo.grid(row=2, column=1, padx=10, pady=2)
+
+        # buttons
+        Button(master=window_currency, text="Edit Favorites", highlightbackground=YELLOW).grid(row=3, column=0, pady=20)
+        Button(master=window_currency, text="Check", highlightbackground=YELLOW, height=3, width=5, command=convector).grid(row=3, column=1, pady=20)
+        # to do label rates.date
+
+
 
 
 
