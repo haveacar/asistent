@@ -78,9 +78,8 @@ class Response:
             """
             Func Reload_data checks date from file
             if date!= date.now try upload
-            :return: dict (rates)
+            :return: dict (rates), str(date)
             """
-            rates = {}
             time_now = datetime.now().strftime("%Y-%m-%d")
             # open rates from file
             with open(os.path.join(CURRENT_PATCH_JASON, "data_rates.json")) as f:
@@ -107,13 +106,16 @@ class Response:
 
         all_rates = reload_rates()
 
+         # get data rates
+        date=all_rates.get("date")
+
         # create dict favorite rates
         dict_favorite_rates = dict.fromkeys(f_rates, 0)
 
         for next_key in f_rates:
             dict_favorite_rates[next_key] = all_rates.get("rates").get(next_key)
 
-        return dict_favorite_rates
+        return dict_favorite_rates, date
 
 
 

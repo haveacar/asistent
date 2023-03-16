@@ -404,7 +404,7 @@ class Assistant(Tk):
     def currency(self):
         """Func Currency Converter"""
         # collect actual favorite rates
-        dict_favorite_rates = self.responses.currency_convector(self.favorite_rates)
+        dict_favorite_rates, date = self.responses.currency_convector(self.favorite_rates)
 
         def convector():
             # take user input keys and amount
@@ -412,20 +412,16 @@ class Assistant(Tk):
             user_input_second=second_combo.get()
             amount = first_rate_entry.get()
 
-
             if user_input_first != "" or user_input_second!= "":
                 # converter if choice==USD
                 if user_input_first == "USD":
                     result = float(amount) * float(dict_favorite_rates.get(user_input_second))
                     second_rate.config(text=round(result, 2))
 
-
-
                     # converter if choice!=USD
                 else:
                     result=float(amount)* float(dict_favorite_rates.get(user_input_second))/float(dict_favorite_rates.get(user_input_first))
                     second_rate.config(text=round(result, 2))
-
 
 
 
@@ -441,8 +437,8 @@ class Assistant(Tk):
         # Labels
         Label(master=window_currency, text="Currency Converter", font=(FONT_NAME, 30, "bold")).grid(row=0, columnspan=2, pady=10)
 
-        currency =Label(master=window_currency, text="", font=(FONT_NAME, 30, "bold"))
-        currency.grid(row=1, columnspan=2,pady=10)
+        currency_l =Label(master=window_currency, text=f"Last update rates: {date}", font=(FONT_NAME, 20, ), highlightbackground=YELLOW, bg=YELLOW, fg="black")
+        currency_l.grid(row=1, columnspan=2,pady=10)
 
 
         first_rate_entry = Entry(master=window_currency, width=10, font=(FONT_NAME, 25, "bold"), bg=YELLOW, fg="black",
