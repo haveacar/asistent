@@ -412,15 +412,16 @@ class Assistant(Tk):
             user_input_second=second_combo.get()
             amount = first_rate_entry.get()
 
-            # converter if choice==USD
-            if user_input_first == "USD":
-                result = float(amount) * float(dict_favorite_rates.get(user_input_second))
-                second_rate.config(text=(result, 2))
+            if user_input_first != "" or user_input_second!= "":
+                # converter if choice==USD
+                if user_input_first == "USD":
+                    result = float(amount) * float(dict_favorite_rates.get(user_input_second))
+                    second_rate.config(text=(result, 2))
 
-                # converter if choice!=USD
-            else:
-                result=float(amount)* float(dict_favorite_rates.get(user_input_second))/float(dict_favorite_rates.get(user_input_first))
-                second_rate.config(text=round(result, 2))
+                    # converter if choice!=USD
+                else:
+                    result=float(amount)* float(dict_favorite_rates.get(user_input_second))/float(dict_favorite_rates.get(user_input_first))
+                    second_rate.config(text=round(result, 2))
 
 
 
