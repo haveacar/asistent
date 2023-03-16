@@ -412,11 +412,14 @@ class Assistant(Tk):
             user_input_second=second_combo.get()
             amount = first_rate_entry.get()
 
+
             if user_input_first != "" or user_input_second!= "":
                 # converter if choice==USD
                 if user_input_first == "USD":
                     result = float(amount) * float(dict_favorite_rates.get(user_input_second))
-                    second_rate.config(text=(result, 2))
+                    second_rate.config(text=round(result, 2))
+
+
 
                     # converter if choice!=USD
                 else:
@@ -438,24 +441,28 @@ class Assistant(Tk):
         # Labels
         Label(master=window_currency, text="Currency Converter", font=(FONT_NAME, 30, "bold")).grid(row=0, columnspan=2, pady=10)
 
+        currency =Label(master=window_currency, text="", font=(FONT_NAME, 30, "bold"))
+        currency.grid(row=1, columnspan=2,pady=10)
+
+
         first_rate_entry = Entry(master=window_currency, width=10, font=(FONT_NAME, 25, "bold"), bg=YELLOW, fg="black",
                                  validate='key',
                                  validatecommand=self.vcmd)
-        first_rate_entry.grid(row=1, column=0, padx=10)
+        first_rate_entry.grid(row=2, column=0, padx=10)
 
         second_rate = Label(master=window_currency, text="0", font=(FONT_NAME, 25, "bold"), bg=YELLOW, fg="black")
-        second_rate.grid(row=2, column=0, padx=10)
+        second_rate.grid(row=3, column=0, padx=10)
 
         # combox
         first_combo = Combobox(master=window_currency, values=self.favorite_rates)
-        first_combo.grid(row=1, column=1, padx=10, pady=2)
+        first_combo.grid(row=2, column=1, padx=10, pady=2)
 
         second_combo = Combobox(master=window_currency, values=self.favorite_rates)
-        second_combo.grid(row=2, column=1, padx=10, pady=2)
+        second_combo.grid(row=3, column=1, padx=10, pady=2)
 
         # buttons
-        Button(master=window_currency, text="Edit Favorites", highlightbackground=YELLOW).grid(row=3, column=0, pady=20)
-        Button(master=window_currency, text="Check", highlightbackground=YELLOW, height=3, width=5, command=convector).grid(row=3, column=1, pady=20)
+        Button(master=window_currency, text="Edit Favorites", highlightbackground=YELLOW).grid(row=4, column=0, pady=20)
+        Button(master=window_currency, text="Convert", highlightbackground=YELLOW, height=3, width=5, command=convector).grid(row=4, column=1, pady=20)
         # to do label rates.date
 
 
