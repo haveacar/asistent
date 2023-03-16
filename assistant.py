@@ -414,13 +414,13 @@ class Assistant(Tk):
 
             # converter if choice==USD
             if user_input_first == "USD":
-                result = int(amount) * int(dict_favorite_rates.get(user_input_second))
-                second_rate.config(text=result)
+                result = float(amount) * float(dict_favorite_rates.get(user_input_second))
+                second_rate.config(text=(result, 2))
 
                 # converter if choice!=USD
             else:
-                result=int(amount)* int(dict_favorite_rates.get(user_input_second))/int(dict_favorite_rates.get(user_input_first))
-                second_rate.config(text=result)
+                result=float(amount)* float(dict_favorite_rates.get(user_input_second))/float(dict_favorite_rates.get(user_input_first))
+                second_rate.config(text=round(result, 2))
 
 
 
