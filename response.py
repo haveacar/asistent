@@ -106,16 +106,19 @@ class Response:
 
         all_rates = reload_rates()
 
-         # get data rates
+        # get data rates
         date=all_rates.get("date")
 
         # create dict favorite rates
         dict_favorite_rates = dict.fromkeys(f_rates, 0)
-
         for next_key in f_rates:
             dict_favorite_rates[next_key] = all_rates.get("rates").get(next_key)
 
-        return dict_favorite_rates, date
+        # get all rates
+        full_rates = all_rates.get("rates")
+
+
+        return dict_favorite_rates, date, full_rates
 
 
 
