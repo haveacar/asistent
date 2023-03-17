@@ -407,43 +407,78 @@ class Assistant(Tk):
         # play(song)
 
     def login(self):
-        bg = "#FF7F50"
+
+        def exit_to_login():
+            self.create_acc_frame.pack_forget()
+            self.login_frame.pack()
+
         def log_in():
-            print("LOG_IN")
+            pass
 
-        def sign_up():
-            print("SIGN_UP")
+        def create_account_window():
+            self.login_frame.pack_forget()
+            self.create_acc_frame.pack()
+            self.email_lbl.grid(column=1, row=0)
+            self.entry_login.grid(column=1, row=1)
+            self.passw_lbl.grid(column=1, row=2)
+            self.entry_password.grid(column=1, row=3)
+            self.name_lbl.grid(column=1, row=4)
+            self.entry_name.grid(column=1, row=5)
+            self.btn_create.grid(column=1, row=6,pady=5, ipadx=5, ipady=5)
+            self.btn_exit_to_login.grid(column=1, row=7, pady=100, ipadx=2, ipady=2)
+        def create_account():
+            pass
 
+        def forgt_password():
+            pass
 
+        # Login setups
+        bg = "#FF7F50"
         login_root = Toplevel(bg=bg)
+        self.login_frame = Frame(login_root, bg=bg)
+        self.login_frame.pack()
         login_root.title("Your account")
         login_root.geometry("450x400")
         login_root.resizable(False, False)
 
         # labels
-        email_lbl = Label(master=login_root, text="Your E-mail or phone", bg=bg)
-        passw_lbl = Label(master=login_root, text="Password", bg=bg)
+        email_lbl = Label(self.login_frame, text="Enter your e-mail", bg=bg)
+        passw_lbl = Label(self.login_frame, text="Password", bg=bg)
 
         # Buttons
-        btn_sign_up = Button(master=login_root, text="Create account", command=sign_up, bg=bg)
-        btn_forgot_pass = Button(master=login_root, text="Forgot a password?", command=log_in, bg=bg)
-        btn_log_in = Button(master=login_root, text="Log in", bg=bg)
+        btn_create_acc = Button(self.login_frame, text="Create account", command=create_account_window, highlightbackground=bg)
+        btn_forgot_pass = Button(self.login_frame, text="Forgot a password?", command=log_in, highlightbackground=bg)
+        btn_log_in = Button(self.login_frame, text="Log in", highlightbackground=bg)
 
         # Entry
-        entry_login = Entry(master=login_root)
-        entry_password = Entry(master=login_root, show="*")
+        self.entry_login = Entry(self.login_frame)
+        self.entry_password = Entry(self.login_frame, show="*")
 
         # Grid
-        email_lbl.grid()
-        btn_sign_up.grid(column=1, row=6)
-        btn_forgot_pass.grid(column=1, row=5)
+        email_lbl.grid(column=1, row=0)
+        self.entry_login.grid(column=1, row=1)
+        passw_lbl.grid(column=1, row=2)
+        self.entry_password.grid(column=1, row=3)
         btn_log_in.grid(column=1, row=4)
-        entry_login.grid(column=1, row=1)
-        entry_password.grid(column=1, row=2)
-        passw_lbl.grid(column=1, row=3)
+        btn_forgot_pass.grid(column=1, row=5)
+        btn_create_acc.grid(column=1, row=8)
+
+        # Create account setups
+        self.create_acc_frame = Frame(login_root, bg=bg)
+        self.email_lbl = Label(self.create_acc_frame, text="Enter your e-mail", bg=bg)
+        self.entry_login = Entry(self.create_acc_frame)
+        self.passw_lbl = Label(self.create_acc_frame, text="Password", bg=bg)
+        self.entry_password = Entry(self.create_acc_frame)
+        self.name_lbl = Label(self.create_acc_frame, text="Enter Your name", bg=bg)
+        self.entry_name = Entry(self.create_acc_frame)
+        self.btn_create = Button(self.create_acc_frame, text="Create account", command=create_account, highlightbackground=bg)
+        self.btn_exit_to_login = Button(self.create_acc_frame, text="Exit", command=exit_to_login, highlightbackground=bg)
+
+
 
         login_root.mainloop()
-        
+        # Add module re - to check a correct number/email
+
     def user_request(self, text: str):
 
         """
