@@ -410,6 +410,7 @@ class Assistant(Tk):
 
         def exit_to_login():
             self.create_acc_frame.pack_forget()
+            self.forgot_password_frame.pack_forget()
             self.login_frame.pack()
 
         def log_in():
@@ -426,11 +427,17 @@ class Assistant(Tk):
             self.entry_name.grid(column=1, row=5)
             self.btn_create.grid(column=1, row=6,pady=5, ipadx=5, ipady=5)
             self.btn_exit_to_login.grid(column=1, row=7, pady=100, ipadx=2, ipady=2)
+
         def create_account():
             pass
 
-        def forgt_password():
-            pass
+        def create_new_passw_window():
+            self.login_frame.pack_forget()
+            self.forgot_password_frame.pack()
+            self.email_lbl.grid(column=1, row=0, pady=20)
+            self.entry_login.grid(column=1, row=1)
+            self.btn_restore_passw.grid(column=1, row=2, pady=10, ipady=5)
+            self.btn_exit_to_login_1.grid(column=1, row=6, pady=100, ipadx=2, ipady=2)
 
         # Login setups
         bg = "#FF7F50"
@@ -447,7 +454,7 @@ class Assistant(Tk):
 
         # Buttons
         btn_create_acc = Button(self.login_frame, text="Create account", command=create_account_window, highlightbackground=bg)
-        btn_forgot_pass = Button(self.login_frame, text="Forgot a password?", command=log_in, highlightbackground=bg)
+        btn_forgot_pass = Button(self.login_frame, text="Forgot a password?", command=create_new_passw_window, highlightbackground=bg)
         btn_log_in = Button(self.login_frame, text="Log in", highlightbackground=bg)
 
         # Entry
@@ -473,6 +480,14 @@ class Assistant(Tk):
         self.entry_name = Entry(self.create_acc_frame)
         self.btn_create = Button(self.create_acc_frame, text="Create account", command=create_account, highlightbackground=bg)
         self.btn_exit_to_login = Button(self.create_acc_frame, text="Exit", command=exit_to_login, highlightbackground=bg)
+
+        # Forgot password setups
+        self.forgot_password_frame = Frame(login_root, bg=bg)
+        self.email_lbl = Label(self.forgot_password_frame, text="Enter your e-mail", bg=bg, font=("Arial", 20, "bold"))
+        self.entry_login = Entry(self.forgot_password_frame)
+        self.btn_restore_passw = Button(self.forgot_password_frame, text="Get code", highlightbackground=bg)
+        self.btn_exit_to_login_1 = Button(self.forgot_password_frame, text="Exit", command=exit_to_login, highlightbackground=bg)
+
 
 
 
