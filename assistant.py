@@ -7,6 +7,7 @@ from response import *
 from tkinter import messagebox
 import math
 from playsound import playsound
+import psycopg2
 
 if __name__ == '__main__':
     sys.exit()
@@ -111,7 +112,7 @@ class Assistant(Tk):
     def presentation(self) -> None:
         """func display greetings labels """
 
-        self.btn_help.config(state='disabled')  # botton disabled
+        self.btn_help.config(state='disabled')  # button disabled
 
         for next_tex in tuple_greetings:
             btn = Button(master=self.central_frame, text=next_tex, font=20, anchor='center',
@@ -408,34 +409,68 @@ class Assistant(Tk):
 
     def login(self):
 
+        def create_user_data():
+            global connection
+            login = self.entry_login_2.get()
+            password = self.entry_password_2.get()
+            name = self.entry_name.get()
+
+
+            try:
+                # connect to exist database
+                connection = psycopg2.connect(host=HOST, user=USER, password=PASSWORD, database=DB_NAME)
+                connection.autocommit = True
+
+                # create a new table
+                with connection.cursor() as cursor:
+                    cursor.execute(f"CREATE TABLE IF NOT EXISTS user_data(id serial PRIMARY KEY, login VARCHAR, password VARCHAR, name VARCHAR)")
+                    print("[INFO] Table created successfully")
+
+                with connection.cursor() as cursor:
+
+                    cursor.execute("INSERT INTO user_data (login, password, name) VALUES (%s, %s, %s);", (login, password, name))
+                    print("[INFO] Data was successfully inserted")
+
+
+            except Exception as _ex:
+                print("[ERROR] Error while working with PostgreSQL", _ex)
+
+            finally:
+                if connection:
+                    connection.close()
+                    print("[INFO] PostgreSQL connection closed")
+
+            messagebox.showinfo("Registration was successful!")
+            login_root.destroy()
+
+            # To do config - button My Account
+
         def exit_to_login():
             self.create_acc_frame.pack_forget()
             self.forgot_password_frame.pack_forget()
             self.login_frame.pack()
 
         def log_in():
-            pass
+            login = self.entry_login_1.get()
+            password = self.entry_password_1.get()
 
         def create_account_window():
             self.login_frame.pack_forget()
             self.create_acc_frame.pack()
-            self.email_lbl.grid(column=1, row=0)
-            self.entry_login.grid(column=1, row=1)
+            self.email_lbl_1.grid(column=1, row=0)
+            self.entry_login_2.grid(column=1, row=1)
             self.passw_lbl.grid(column=1, row=2)
-            self.entry_password.grid(column=1, row=3)
+            self.entry_password_2.grid(column=1, row=3)
             self.name_lbl.grid(column=1, row=4)
             self.entry_name.grid(column=1, row=5)
             self.btn_create.grid(column=1, row=6,pady=5, ipadx=5, ipady=5)
             self.btn_exit_to_login.grid(column=1, row=7, pady=100, ipadx=2, ipady=2)
 
-        def create_account():
-            pass
-
         def create_new_passw_window():
             self.login_frame.pack_forget()
             self.forgot_password_frame.pack()
             self.email_lbl.grid(column=1, row=0, pady=20)
-            self.entry_login.grid(column=1, row=1)
+            self.entry_login_3.grid(column=1, row=1)
             self.btn_restore_passw.grid(column=1, row=2, pady=10, ipady=5)
             self.btn_exit_to_login_1.grid(column=1, row=6, pady=100, ipadx=2, ipady=2)
 
@@ -451,48 +486,49 @@ class Assistant(Tk):
         # labels
         email_lbl = Label(self.login_frame, text="Enter your e-mail", bg=bg)
         passw_lbl = Label(self.login_frame, text="Password", bg=bg)
+        self.error_message_lbl = Label(self.login_frame, bg=bg)
 
         # Buttons
         btn_create_acc = Button(self.login_frame, text="Create account", command=create_account_window, highlightbackground=bg)
         btn_forgot_pass = Button(self.login_frame, text="Forgot a password?", command=create_new_passw_window, highlightbackground=bg)
-        btn_log_in = Button(self.login_frame, text="Log in", highlightbackground=bg)
+        btn_log_in = Button(self.login_frame, text="Log in", highlightbackground=bg, command=log_in)
 
         # Entry
-        self.entry_login = Entry(self.login_frame)
-        self.entry_password = Entry(self.login_frame, show="*")
+        self.entry_login_1 = Entry(self.login_frame)
+        self.entry_password_1 = Entry(self.login_frame, show="*")
 
         # Grid
         email_lbl.grid(column=1, row=0)
-        self.entry_login.grid(column=1, row=1)
+        self.entry_login_1.grid(column=1, row=1)
         passw_lbl.grid(column=1, row=2)
-        self.entry_password.grid(column=1, row=3)
+        self.entry_password_1.grid(column=1, row=3)
         btn_log_in.grid(column=1, row=4)
         btn_forgot_pass.grid(column=1, row=5)
         btn_create_acc.grid(column=1, row=8)
+        # self.error_message_lbl.grid(column=1, row=9, columnspan=2)
 
         # Create account setups
         self.create_acc_frame = Frame(login_root, bg=bg)
-        self.email_lbl = Label(self.create_acc_frame, text="Enter your e-mail", bg=bg)
-        self.entry_login = Entry(self.create_acc_frame)
+        self.email_lbl_1 = Label(self.create_acc_frame, text="Enter your e-mail", bg=bg)
+        self.entry_login_2 = Entry(self.create_acc_frame)
         self.passw_lbl = Label(self.create_acc_frame, text="Password", bg=bg)
-        self.entry_password = Entry(self.create_acc_frame)
+        self.entry_password_2 = Entry(self.create_acc_frame)
         self.name_lbl = Label(self.create_acc_frame, text="Enter Your name", bg=bg)
         self.entry_name = Entry(self.create_acc_frame)
-        self.btn_create = Button(self.create_acc_frame, text="Create account", command=create_account, highlightbackground=bg)
+        self.btn_create = Button(self.create_acc_frame, text="Create account", command=create_user_data, highlightbackground=bg)
         self.btn_exit_to_login = Button(self.create_acc_frame, text="Exit", command=exit_to_login, highlightbackground=bg)
 
         # Forgot password setups
         self.forgot_password_frame = Frame(login_root, bg=bg)
         self.email_lbl = Label(self.forgot_password_frame, text="Enter your e-mail", bg=bg, font=("Arial", 20, "bold"))
-        self.entry_login = Entry(self.forgot_password_frame)
+        self.entry_login_3 = Entry(self.forgot_password_frame)
         self.btn_restore_passw = Button(self.forgot_password_frame, text="Get code", highlightbackground=bg)
         self.btn_exit_to_login_1 = Button(self.forgot_password_frame, text="Exit", command=exit_to_login, highlightbackground=bg)
 
 
-
-
         login_root.mainloop()
         # Add module re - to check a correct number/email
+
 
     def user_request(self, text: str):
 

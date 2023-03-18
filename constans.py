@@ -12,6 +12,12 @@ IMAGE_PATH = os.path.join(DIR_PATH, 'voice bg.jpg')
 TIMER_PATH = os.path.join(DIR_PATH, 'tomato.png')
 TIMER_PATH = os.path.join(DIR_PATH, 'tomato.png')
 
+# DataBase
+HOST = "127.0.0.1"
+USER = "postgres"
+PASSWORD = "Lenin_1917"
+DB_NAME = "users"
+
 
 
 # Colors Constants
