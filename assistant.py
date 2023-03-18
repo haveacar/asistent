@@ -417,16 +417,10 @@ class Assistant(Tk):
 
 
             try:
-                # connect to exist database
-                connection = psycopg2.connect(host=HOST, user=USER, password=PASSWORD, database=DB_NAME)
-                connection.autocommit = True
-
                 # create a new table
-                with connection.cursor() as cursor:
+                with self.connection.cursor() as cursor:
                     cursor.execute(f"CREATE TABLE IF NOT EXISTS user_data(id serial PRIMARY KEY, login VARCHAR, password VARCHAR, name VARCHAR)")
                     print("[INFO] Table created successfully")
-
-                with connection.cursor() as cursor:
 
                     cursor.execute("INSERT INTO user_data (login, password, name) VALUES (%s, %s, %s);", (login, password, name))
                     print("[INFO] Data was successfully inserted")
@@ -436,14 +430,79 @@ class Assistant(Tk):
                 print("[ERROR] Error while working with PostgreSQL", _ex)
 
             finally:
-                if connection:
-                    connection.close()
+                if self.connection:
+                    self.connection.close()
                     print("[INFO] PostgreSQL connection closed")
 
-            messagebox.showinfo("Registration was successful!")
+            messagebox.showinfo(message="Registration was successful!")
             login_root.destroy()
 
             # To do config - button My Account
+
+        def forget_passw_window():
+            login = self.entry_login_3.get()
+
+            try:
+                with self.connection.cursor() as cursor:
+                    cursor.execute(f"SELECT * FROM user_data WHERE login='{login}'")
+                    result = cursor.fetchall()
+                    print(result)
+
+            except Exception as _ex:
+                print("[ERROR] Error:", _ex)
+
+            finally:
+                    print("[INFO] PostgreSQL connection closed")
+            # global connection
+
+            if len(login) == 0:
+                messagebox.showwarning(title="Error", message="Email is empty")
+                return
+            if len(result) == 0:
+                messagebox.showwarning(title="Error", message="It is not possible to reset the password\nYou don't have an account")
+                return
+
+            self.forgot_password_frame.pack_forget()
+            self.forgot_password_frame_2.pack()
+            self.passw_lbl_2.grid(column=1, row=0, pady=10)
+            self.new_passw_entry.grid(column=1, row=1)
+            self.new_passw_btn.grid(column=1, row=2, pady=20,ipady=4, ipadx=4)
+            self.btn_exit_to_forget.grid(column=1, row=3, pady=50,ipady=4, ipadx=4)
+
+        def exit_to_forget():
+            self.forgot_password_frame_2.pack_forget()
+            self.forgot_password_frame.pack()
+    
+        def forget_passw():
+            # Пока не введена почта, нельзя продолжить. Add disable
+            global connection
+            login = self.entry_login_3.get()
+            password = self.new_passw_entry.get()
+            if len(password) == 0:
+                messagebox.showwarning(title="Error", message="Password is empty")
+                return
+
+            try:
+                with self.connection.cursor() as cursor:
+                    cursor.execute(f"SELECT name FROM user_data WHERE login='{login}'")
+                    name = cursor.fetchone()
+                    # print(*name[0])
+                    cursor.execute(f"DELETE from user_data WHERE login='{login}'")
+                    print("[INFO] Password was delete")
+
+                    cursor.execute("INSERT INTO user_data (login, password, name) VALUES (%s, %s, %s);",(login, password, name))
+                    print("[INFO] New password was added")
+
+            except Exception as _ex:
+                print("[ERROR] Error with login to account", _ex)
+
+            finally:
+                if self.connection:
+                    self.connection.close()
+                    print("[INFO] PostgreSQL connection closed")
+
+            messagebox.showinfo(message="Password changed!")
+            login_root.destroy()
 
         def exit_to_login():
             self.create_acc_frame.pack_forget()
@@ -451,6 +510,7 @@ class Assistant(Tk):
             self.login_frame.pack()
 
         def log_in():
+
             global connection
             login = self.entry_login_1.get()
             password = self.entry_password_1.get()
@@ -458,8 +518,8 @@ class Assistant(Tk):
                 messagebox.showwarning(title="Error", message="User name or password are empty")
                 return
 
-
             try:
+                # Ошибка: если таблица не создана, то вводя неправильные данные не выскочит предупреждения, просто ничего не происходит
                 # connect to exist database
                 connection = psycopg2.connect(host=HOST, user=USER, password=PASSWORD, database=DB_NAME)
                 connection.autocommit = True
@@ -479,8 +539,8 @@ class Assistant(Tk):
                 print("[ERROR] Error with login to account", _ex)
 
             finally:
-                if connection:
-                    connection.close()
+                if self.connection:
+                    self.connection.close()
                     print("[INFO] PostgreSQL connection closed")
 
         def create_account_window():
@@ -502,6 +562,11 @@ class Assistant(Tk):
             self.entry_login_3.grid(column=1, row=1)
             self.btn_restore_passw.grid(column=1, row=2, pady=10, ipady=5)
             self.btn_exit_to_login_1.grid(column=1, row=6, pady=100, ipadx=2, ipady=2)
+
+
+        # DB setups
+        self.connection = psycopg2.connect(host=HOST, user=USER, password=PASSWORD, database=DB_NAME)
+        self.connection.autocommit = True
 
         # Login setups
         bg = "#FF7F50"
@@ -549,11 +614,16 @@ class Assistant(Tk):
 
         # Forgot password setups
         self.forgot_password_frame = Frame(login_root, bg=bg)
+        self.forgot_password_frame_2 = Frame(login_root, bg=bg)
         self.email_lbl = Label(self.forgot_password_frame, text="Enter your e-mail", bg=bg, font=("Arial", 20, "bold"))
         self.entry_login_3 = Entry(self.forgot_password_frame)
-        self.btn_restore_passw = Button(self.forgot_password_frame, text="Get code", highlightbackground=bg)
+        self.btn_restore_passw = Button(self.forgot_password_frame, text="Continue", highlightbackground=bg, command=forget_passw_window)
         self.btn_exit_to_login_1 = Button(self.forgot_password_frame, text="Exit", command=exit_to_login, highlightbackground=bg)
-
+        # # Forgot password 2 setups
+        self.passw_lbl_2 = Label(self.forgot_password_frame_2, text="Enter new password", bg=bg, font=("Arial", 20, "bold"))
+        self.new_passw_entry = Entry(self.forgot_password_frame_2)
+        self.new_passw_btn = Button(self.forgot_password_frame_2, text="Create new password", highlightbackground=bg, command=forget_passw)
+        self.btn_exit_to_forget = Button(self.forgot_password_frame_2, text="Exit", command=exit_to_forget, highlightbackground=bg)
 
         login_root.mainloop()
         # Add module re - to check a correct number/email
