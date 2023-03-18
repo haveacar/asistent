@@ -451,8 +451,37 @@ class Assistant(Tk):
             self.login_frame.pack()
 
         def log_in():
+            global connection
             login = self.entry_login_1.get()
             password = self.entry_password_1.get()
+            if len(login) == 0 or len(password) == 0:
+                messagebox.showwarning(title="Error", message="User name or password are empty")
+                return
+
+
+            try:
+                # connect to exist database
+                connection = psycopg2.connect(host=HOST, user=USER, password=PASSWORD, database=DB_NAME)
+                connection.autocommit = True
+
+                with connection.cursor() as cursor:
+                    cursor.execute(f"SELECT * FROM user_data WHERE login='{login}' and password='{password}'")
+                    query_result = cursor.fetchall()
+
+                if len(query_result) == 0:
+                    messagebox.showwarning(title = "Error", message = "Incorrect user name or password")
+                else:
+                    print("[INFO] Login to the account was made successfully")
+                    login_root.destroy()
+                    # TO-DO: Add config widget in main root for account
+
+            except Exception as _ex:
+                print("[ERROR] Error with login to account", _ex)
+
+            finally:
+                if connection:
+                    connection.close()
+                    print("[INFO] PostgreSQL connection closed")
 
         def create_account_window():
             self.login_frame.pack_forget()
@@ -528,7 +557,6 @@ class Assistant(Tk):
 
         login_root.mainloop()
         # Add module re - to check a correct number/email
-
 
     def user_request(self, text: str):
 
