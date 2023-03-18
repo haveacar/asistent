@@ -402,11 +402,6 @@ class Assistant(Tk):
 
         stopwatch.mainloop()
 
-    def play_sound(self):
-        playsound("sounds/sound.mp3")
-        # song = AudioSegment.from_mp3(file="sound.mp3")
-        # play(song)
-
     def login(self):
 
         def create_user_data():
@@ -619,7 +614,7 @@ class Assistant(Tk):
         self.entry_login_3 = Entry(self.forgot_password_frame)
         self.btn_restore_passw = Button(self.forgot_password_frame, text="Continue", highlightbackground=bg, command=forget_passw_window)
         self.btn_exit_to_login_1 = Button(self.forgot_password_frame, text="Exit", command=exit_to_login, highlightbackground=bg)
-        # # Forgot password 2 setups
+        #  Forgot password 2 setups
         self.passw_lbl_2 = Label(self.forgot_password_frame_2, text="Enter new password", bg=bg, font=("Arial", 20, "bold"))
         self.new_passw_entry = Entry(self.forgot_password_frame_2)
         self.new_passw_btn = Button(self.forgot_password_frame_2, text="Create new password", highlightbackground=bg, command=forget_passw)
