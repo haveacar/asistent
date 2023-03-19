@@ -29,7 +29,7 @@ YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
 
 
-commands_dict = {
+
 
 
 # api key and request url
