@@ -6,7 +6,6 @@ import speech_recognition as sr
 from response import *
 from tkinter import messagebox
 import math
-from playsound import playsound
 import psycopg2
 
 if __name__ == '__main__':
@@ -649,9 +648,6 @@ class Assistant(Tk):
             # stopwatch
             case "stopwatch" | "turn on stopwatch" | "Set stopwatch" | "set up stopwatch":
                 self.create_stopwatch_window()
-
-            case "sound":
-                self.play_sound()
 
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
