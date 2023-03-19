@@ -36,7 +36,7 @@ class Assistant(Tk):
         # init class response
         self.responses = Response()
 
-        self.btn_log = Button(text="LOGIN", command=self.login)
+        self.btn_log = Button(self.top_frame,text="LOGIN", command=self.login, highlightbackground='#404040')
 
     def validate(self, new_value) -> str | int:
         """
@@ -70,8 +70,6 @@ class Assistant(Tk):
         self.btn_voice.grid(column=0, row=0, sticky='nsew')
         self.entry_text = Entry(master=self.bottom_frame, width=40, highlightbackground='#404040')
         self.entry_text.grid(column=1, row=0)
-        btn_menu = Button(master=self.top_frame, text="Menu", highlightbackground='#404040')
-        btn_menu.pack(side=LEFT)
         self.btn_help = Button(master=self.central_frame, text="How I can help?", font=20, command=self.presentation,
                                highlightbackground='#404040')
         self.btn_help.pack(side=TOP, pady=20)
