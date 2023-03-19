@@ -6,6 +6,7 @@ import speech_recognition as sr
 from response import *
 from tkinter import messagebox
 import math
+from tkinter.ttk import Combobox, Style
 
 import psycopg2
 
@@ -102,8 +103,11 @@ class Assistant(Tk):
         # validation numer
         self.vcmd = (self.register(self.validate), '%P')
 
-        # stopwatch constans
+        # stopwatch constants
         self.flag_w = False
+
+        # currency constants
+        self.favorite_rates = ["USD", "UAH", "EUR", "PLN", "RON", "HUF", "ILS"]
 
         self.mainloop()
 
@@ -401,6 +405,7 @@ class Assistant(Tk):
 
         stopwatch.mainloop()
 
+
     def login(self):
 
         def create_user_data():
@@ -622,6 +627,91 @@ class Assistant(Tk):
         login_root.mainloop()
         # Add module re - to check a correct number/email
 
+    def currency(self):
+        """Func Currency Converter"""
+        # collect actual favorite rates
+        dict_favorite_rates, date, all_rates = self.responses.currency_convector(self.favorite_rates)
+
+        # create all rates name list
+        all_rates_list = [key for key in all_rates]
+
+        def convector() -> None:
+            """Func convertor convert rates"""
+            # take user input keys and amount
+            user_input_first = first_combo.get()
+            user_input_second = second_combo.get()
+            amount = first_rate_entry.get()
+
+            if user_input_first != "" or user_input_second != "":
+                # converter if choice==USD
+                if user_input_first == "USD":
+                    result = float(amount) * float(dict_favorite_rates.get(user_input_second))
+                    second_rate.config(text=round(result, 2))
+
+                    # converter if choice!=USD
+                else:
+                    result = float(amount) * float(dict_favorite_rates.get(user_input_second)) / float(
+                        dict_favorite_rates.get(user_input_first))
+                    second_rate.config(text=round(result, 2))
+
+        def add_rates_favorite():
+            """Func get rates and add to favorites, update rates favorite rates dict (k,v)"""
+
+            # get key, value
+            user_key = rates_combo.get()
+            rate_value = all_rates.get(user_key)
+
+            if user_key != "":
+                # update dictionary
+                dict_favorite_rates[user_key] = rate_value
+                # update favorite rates list
+                self.favorite_rates.insert(0, user_key)
+                # update combo
+                first_combo.config(values=self.favorite_rates)
+                second_combo.config(values=self.favorite_rates)
+
+        # set up window
+        window_currency = Toplevel()
+        window_currency.title("Currency Convector")
+        window_currency.geometry("500x400+800+100")
+        window_currency.config(bg=YELLOW)
+        window_currency.resizable(False, False)
+
+        # Labels
+        Label(master=window_currency, text="Currency Converter", font=(FONT_NAME, 30, "bold")).grid(row=0, columnspan=2,
+                                                                                                    pady=10)
+
+        currency_l = Label(master=window_currency, text=f"Last update rates: {date}", font=(FONT_NAME, 20,),
+                           highlightbackground=YELLOW, bg=YELLOW, fg="black")
+        currency_l.grid(row=1, columnspan=2, pady=10)
+
+        first_rate_entry = Entry(master=window_currency, width=10, font=(FONT_NAME, 25, "bold"), bg=YELLOW, fg="black",
+                                 validate='key',
+                                 validatecommand=self.vcmd)
+        first_rate_entry.grid(row=2, column=0, padx=10)
+
+        second_rate = Label(master=window_currency, text="0", font=(FONT_NAME, 25, "bold"), bg=YELLOW, fg="black")
+        second_rate.grid(row=3, column=0, padx=10)
+
+        # combox
+        first_combo = Combobox(master=window_currency, values=self.favorite_rates)
+        first_combo.grid(row=2, column=1, padx=10, pady=2)
+
+        second_combo = Combobox(master=window_currency, values=self.favorite_rates)
+        second_combo.grid(row=3, column=1, padx=10, pady=2)
+
+        rates_combo = Combobox(master=window_currency, values=all_rates_list)
+        rates_combo.grid(row=5, column=0)
+
+        # buttons
+        Button(master=window_currency, text="Add to Favorites", highlightbackground=YELLOW,
+               command=add_rates_favorite).grid(row=6, column=0)
+        Button(master=window_currency, text="Convert", highlightbackground=YELLOW, height=3, width=5,
+               command=convector).grid(row=4, column=1, pady=20)
+
+        window_currency.mainloop()
+
+
     def user_request(self, text: str):
 
         """
@@ -650,7 +740,9 @@ class Assistant(Tk):
             # stopwatch
             case "stopwatch" | "turn on stopwatch" | "Set stopwatch" | "set up stopwatch":
                 self.create_stopwatch_window()
-
+            # currency
+            case "currency" | "currency convector" | "currency today":
+                self.currency()
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
                 pass
