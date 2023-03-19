@@ -6,6 +6,7 @@ import speech_recognition as sr
 from response import *
 from tkinter import messagebox
 import math
+
 import psycopg2
 
 if __name__ == '__main__':
@@ -328,6 +329,7 @@ class Assistant(Tk):
         window_timer.mainloop()
 
     def create_stopwatch_window(self):
+        """stop watch func"""
 
         start_w = 0
         self.timer_w = None
