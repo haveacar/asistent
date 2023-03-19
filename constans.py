@@ -14,6 +14,12 @@ TIMER_PATH = os.path.join(DIR_PATH, 'tomato.png')
 CURRENT_PATH = os.path.dirname(__file__)
 CURRENT_PATCH_JASON = os.path.join(CURRENT_PATH, "static")
 
+# DataBase
+HOST = "127.0.0.1"
+USER = "postgres"
+PASSWORD = "Lenin_1917"
+DB_NAME = "users"
+
 
 
 # Colors Constants
@@ -23,6 +29,9 @@ YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
 
 
+commands_dict = {
+
+
 # api key and request url
 API_KEY = "c66xOBOerxjgjCqRfbT3MzvIIqMoDm6e"
 REQUEST_URL = "https://api.apilayer.com/fixer/latest?base=USD"
@@ -30,11 +39,13 @@ REQUEST_URL = "https://api.apilayer.com/fixer/latest?base=USD"
 
 
 commands_list = {
+
     "commands": {
         "time_now": ["what's time now", "time now"],
         "day_today":["what's the day today","date today","date now", "what's the date today", "day today"],
         "create_window_wiki": ["search in wikipedia", "search wikipedia", "wikipedia", "wiki"],
-        "create_timer_window":["timer", "turn on timer", "Set timer", "set a timer"]
+        'create_timer_window':["timer", "turn on timer", "Set timer", "set a timer"],
+        'play_sound':['sound']
 
     }
 }
