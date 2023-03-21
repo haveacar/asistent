@@ -29,9 +29,6 @@ YELLOW = "#f7f5dd"
 FONT_NAME = "Courier"
 
 
-
-
-
 # api key and request url
 API_KEY = "c66xOBOerxjgjCqRfbT3MzvIIqMoDm6e"
 REQUEST_URL = "https://api.apilayer.com/fixer/latest?base=USD"

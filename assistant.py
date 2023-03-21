@@ -1,13 +1,12 @@
 import sys
 from tkinter import *
 from PIL import ImageTk, Image
-from constans import *
+# from constans import *
 import speech_recognition as sr
 from response import *
 from tkinter import messagebox
 import math
-from tkinter.ttk import Combobox, Style
-
+from tkinter.ttk import Combobox
 import psycopg2
 
 if __name__ == '__main__':
@@ -21,6 +20,7 @@ class Assistant(Tk):
         super().__init__()
 
         # screen set up
+        self.flag_acc = None
         self.title("AIBO Voice Assistant")
         self.geometry("1100x768")
         self.config(bg='#404040')
@@ -38,6 +38,7 @@ class Assistant(Tk):
         self.responses = Response()
 
         self.btn_log = Button(self.top_frame,text="LOGIN", command=self.login, highlightbackground='#404040')
+        self.btn_account = Button(self.top_frame, text="Account", command=self.account, highlightbackground='#404040')
 
     def validate(self, new_value) -> str | int:
         """
@@ -405,15 +406,18 @@ class Assistant(Tk):
 
         stopwatch.mainloop()
 
-
     def login(self):
 
         def create_user_data():
+            self.flag_acc = False
             global connection
             login = self.entry_login_2.get()
             password = self.entry_password_2.get()
             name = self.entry_name.get()
-
+            if len(login)  == 0:
+                messagebox.showerror(message="One of the fields is empty")
+                print(len(login), len(password), len(name))
+                return
 
             try:
                 # create a new table
@@ -423,6 +427,10 @@ class Assistant(Tk):
 
                     cursor.execute("INSERT INTO user_data (login, password, name) VALUES (%s, %s, %s);", (login, password, name))
                     print("[INFO] Data was successfully inserted")
+                    messagebox.showinfo(message="Registration was successful!")
+                    login_root.destroy()
+                    self.btn_log.destroy()
+                    self.btn_account.pack()
 
 
             except Exception as _ex:
@@ -432,11 +440,6 @@ class Assistant(Tk):
                 if self.connection:
                     self.connection.close()
                     print("[INFO] PostgreSQL connection closed")
-
-            messagebox.showinfo(message="Registration was successful!")
-            login_root.destroy()
-
-            # To do config - button My Account
 
         def forget_passw_window():
             login = self.entry_login_3.get()
@@ -450,9 +453,8 @@ class Assistant(Tk):
             except Exception as _ex:
                 print("[ERROR] Error:", _ex)
 
-            finally:
-                    print("[INFO] PostgreSQL connection closed")
-            # global connection
+
+
 
             if len(login) == 0:
                 messagebox.showwarning(title="Error", message="Email is empty")
@@ -473,7 +475,7 @@ class Assistant(Tk):
             self.forgot_password_frame.pack()
     
         def forget_passw():
-            # Пока не введена почта, нельзя продолжить. Add disable
+            self.flag_acc = False
             global connection
             login = self.entry_login_3.get()
             password = self.new_passw_entry.get()
@@ -491,6 +493,11 @@ class Assistant(Tk):
 
                     cursor.execute("INSERT INTO user_data (login, password, name) VALUES (%s, %s, %s);",(login, password, name))
                     print("[INFO] New password was added")
+                    messagebox.showinfo(message="Password changed!")
+                    login_root.destroy()
+                    self.btn_log.destroy()
+                    self.btn_account.pack()
+
 
             except Exception as _ex:
                 print("[ERROR] Error with login to account", _ex)
@@ -500,16 +507,13 @@ class Assistant(Tk):
                     self.connection.close()
                     print("[INFO] PostgreSQL connection closed")
 
-            messagebox.showinfo(message="Password changed!")
-            login_root.destroy()
-
         def exit_to_login():
             self.create_acc_frame.pack_forget()
             self.forgot_password_frame.pack_forget()
             self.login_frame.pack()
 
         def log_in():
-
+            self.flag_acc = False
             global connection
             login = self.entry_login_1.get()
             password = self.entry_password_1.get()
@@ -529,10 +533,13 @@ class Assistant(Tk):
 
                 if len(query_result) == 0:
                     messagebox.showwarning(title = "Error", message = "Incorrect user name or password")
+
                 else:
                     print("[INFO] Login to the account was made successfully")
+                    messagebox.showinfo(message="Login to the account was made successfully! ")
                     login_root.destroy()
-                    # TO-DO: Add config widget in main root for account
+                    self.btn_log.destroy()
+                    self.btn_account.pack()
 
             except Exception as _ex:
                 print("[ERROR] Error with login to account", _ex)
@@ -572,7 +579,7 @@ class Assistant(Tk):
         login_root = Toplevel(bg=bg)
         self.login_frame = Frame(login_root, bg=bg)
         self.login_frame.pack()
-        login_root.title("Your account")
+        login_root.title("Registration")
         login_root.geometry("450x400")
         login_root.resizable(False, False)
 
@@ -598,7 +605,6 @@ class Assistant(Tk):
         btn_log_in.grid(column=1, row=4)
         btn_forgot_pass.grid(column=1, row=5)
         btn_create_acc.grid(column=1, row=8)
-        # self.error_message_lbl.grid(column=1, row=9, columnspan=2)
 
         # Create account setups
         self.create_acc_frame = Frame(login_root, bg=bg)
@@ -625,7 +631,17 @@ class Assistant(Tk):
         self.btn_exit_to_forget = Button(self.forgot_password_frame_2, text="Exit", command=exit_to_forget, highlightbackground=bg)
 
         login_root.mainloop()
-        # Add module re - to check a correct number/email
+
+    def account(self):
+
+            # Top level setups
+            bg = "#FF7F50"
+            account_root = Toplevel(bg=bg)
+            self.account_frame = Frame(account_root, bg=bg)
+            self.account_frame.pack()
+            account_root.title("Your account")
+            account_root.geometry("450x400")
+            account_root.resizable(False, False)
 
     def currency(self):
         """Func Currency Converter"""
@@ -711,7 +727,6 @@ class Assistant(Tk):
 
         window_currency.mainloop()
 
-
     def user_request(self, text: str):
 
         """
@@ -745,4 +760,3 @@ class Assistant(Tk):
                 self.currency()
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
-                pass
