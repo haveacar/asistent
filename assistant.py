@@ -40,6 +40,7 @@ class Assistant(Tk):
         self.btn_log = Button(self.top_frame,text="LOGIN", command=self.login, highlightbackground='#404040')
         self.btn_account = Button(self.top_frame, text="Account", command=self.account, highlightbackground='#404040')
 
+
     def validate(self, new_value) -> str | int:
         """
         validation function int
@@ -428,6 +429,10 @@ class Assistant(Tk):
                     cursor.execute("INSERT INTO user_data (login, password, name) VALUES (%s, %s, %s);", (login, password, name))
                     print("[INFO] Data was successfully inserted")
                     messagebox.showinfo(message="Registration was successful!")
+
+                    cursor.execute(f"SELECT name FROM user_data WHERE login='{login}' and password='{password}'")
+                    self.name = cursor.fetchone()
+
                     login_root.destroy()
                     self.btn_log.destroy()
                     self.btn_account.pack()
@@ -487,13 +492,16 @@ class Assistant(Tk):
                 with self.connection.cursor() as cursor:
                     cursor.execute(f"SELECT name FROM user_data WHERE login='{login}'")
                     name = cursor.fetchone()
-                    # print(*name[0])
                     cursor.execute(f"DELETE from user_data WHERE login='{login}'")
                     print("[INFO] Password was delete")
 
                     cursor.execute("INSERT INTO user_data (login, password, name) VALUES (%s, %s, %s);",(login, password, name))
                     print("[INFO] New password was added")
                     messagebox.showinfo(message="Password changed!")
+
+                    cursor.execute(f"SELECT name FROM user_data WHERE login='{login}' and password='{password}'")
+                    self.name = cursor.fetchone()
+
                     login_root.destroy()
                     self.btn_log.destroy()
                     self.btn_account.pack()
@@ -530,6 +538,9 @@ class Assistant(Tk):
                 with connection.cursor() as cursor:
                     cursor.execute(f"SELECT * FROM user_data WHERE login='{login}' and password='{password}'")
                     query_result = cursor.fetchall()
+                    cursor.execute(f"SELECT name FROM user_data WHERE login='{login}' and password='{password}'")
+                    self.name = cursor.fetchone()
+
 
                 if len(query_result) == 0:
                     messagebox.showwarning(title = "Error", message = "Incorrect user name or password")
@@ -634,14 +645,29 @@ class Assistant(Tk):
 
     def account(self):
 
-            # Top level setups
-            bg = "#FF7F50"
-            account_root = Toplevel(bg=bg)
-            self.account_frame = Frame(account_root, bg=bg)
-            self.account_frame.pack()
-            account_root.title("Your account")
-            account_root.geometry("450x400")
-            account_root.resizable(False, False)
+        def log_out():
+            pass
+            # Write exit from account
+
+        # Top level setups
+        bg = "#FF7F50"
+        account_root = Toplevel(bg=bg)
+        self.account_frame = Frame(account_root, bg=bg)
+        self.account_frame.pack()
+        account_root.title("Your account")
+        account_root.geometry("450x400")
+        account_root.resizable(False, False)
+        self.btn_log_out = Button(self.account_frame, text="Log Out")
+        self.btn_log_out.grid(column=0,row=6, ipadx=2, ipady=2, pady=100)
+
+        # Account setups
+        name_lbl = Label(self.account_frame, text=f"Hello {self.name[0].capitalize()}!", font=("Ariel", 20, 'bold'), bg=bg,
+                         fg="black")
+        name_lbl.grid(column=0, row=1, pady=5)
+
+        yes = IntVar()
+        enabled_checkbutton = Checkbutton(self.account_frame, text="Determine your location by GPS", variable=yes, bg=bg)
+        enabled_checkbutton.grid(column=0, row=2, padx=6, pady=6)
 
     def currency(self):
         """Func Currency Converter"""
