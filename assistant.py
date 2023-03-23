@@ -20,6 +20,7 @@ class Assistant(Tk):
         super().__init__()
 
         # screen set up
+        self.name = None
         self.flag_acc = None
         self.title("AIBO Voice Assistant")
         self.geometry("1100x768")
@@ -39,7 +40,6 @@ class Assistant(Tk):
 
         self.btn_log = Button(self.top_frame,text="LOGIN", command=self.login, highlightbackground='#404040')
         self.btn_account = Button(self.top_frame, text="Account", command=self.account, highlightbackground='#404040')
-
 
     def validate(self, new_value) -> str | int:
         """
@@ -646,28 +646,49 @@ class Assistant(Tk):
     def account(self):
 
         def log_out():
-            pass
-            # Write exit from account
+            self.account_root.destroy()
+            self.btn_account.destroy()
 
         # Top level setups
         bg = "#FF7F50"
-        account_root = Toplevel(bg=bg)
-        self.account_frame = Frame(account_root, bg=bg)
+        city = IntVar()
+        dark_theme = IntVar()
+        self.account_root = Toplevel(bg=bg)
+        self.account_frame = Frame(self.account_root, bg=bg)
         self.account_frame.pack()
-        account_root.title("Your account")
-        account_root.geometry("450x400")
-        account_root.resizable(False, False)
-        self.btn_log_out = Button(self.account_frame, text="Log Out")
-        self.btn_log_out.grid(column=0,row=6, ipadx=2, ipady=2, pady=100)
+        self.account_root.title("Your account")
+        # account_root.geometry("550x450")
+        self.account_root.resizable(False, False)
+
 
         # Account setups
-        name_lbl = Label(self.account_frame, text=f"Hello {self.name[0].capitalize()}!", font=("Ariel", 20, 'bold'), bg=bg,
-                         fg="black")
-        name_lbl.grid(column=0, row=1, pady=5)
+        name_lbl = Label(self.account_frame, text=f"Hello {self.name[0].capitalize()}!", font=("Ariel", 20, 'bold'), bg=bg, fg="black")
+        enabled_checkbutton = Checkbutton(self.account_frame, text="Determine your location by GPS", variable=city, bg=bg)
+        self.btn_save = Button(self.account_frame, text="Save changes", highlightbackground=bg)
+        dark_theme = Checkbutton(self.account_frame, text="Dark theme", variable=dark_theme, bg=bg)
 
-        yes = IntVar()
-        enabled_checkbutton = Checkbutton(self.account_frame, text="Determine your location by GPS", variable=yes, bg=bg)
-        enabled_checkbutton.grid(column=0, row=2, padx=6, pady=6)
+        # Add user photo with canvas
+
+
+        # Menu
+        self.account_root.option_add('*tearOff', False)
+        root_menubar = Menu(self.account_root)
+        self.account_root.config(menu=root_menubar)
+        file_menu = Menu(root_menubar)
+        # add menu items to file menu
+        file_menu.add_command(label='Contact to developer')
+        file_menu.add_command(label='About program')
+        file_menu.add_command(label='Check for updates')
+        file_menu.add_separator(background='red')
+        file_menu.add_command(label='Log out', command=log_out)
+        # add menu items to root menubar
+        root_menubar.add_cascade(label='Options', menu=file_menu)
+
+        # Grid
+        name_lbl.grid(column=0, row=0)
+        enabled_checkbutton.grid(column=0, row=1)
+        dark_theme.grid(column=0, row=2)
+        self.btn_save.grid(column=0, row=5)
 
     def currency(self):
         """Func Currency Converter"""
@@ -786,3 +807,5 @@ class Assistant(Tk):
                 self.currency()
             case _:
                 self.response_lbl.config(text="I don't know this command:(")
+
+
