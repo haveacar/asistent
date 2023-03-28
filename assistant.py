@@ -117,9 +117,9 @@ class Assistant(Tk):
         self.btn_help.config(state='disabled')  # button disabled
 
         for next_tex in tuple_greetings:
-            btn = Button(master=self.central_frame, text=next_tex, font=20, anchor='center',
+            lebel = Label(master=self.central_frame, text=next_tex.upper(), font=20, anchor='center',
                          highlightbackground='#404040')
-            btn.pack(pady=5, side=LEFT)
+            lebel.pack(pady=5, side=LEFT, padx=3)
 
     def voice_input(self) -> None:
         """
