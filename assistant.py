@@ -118,7 +118,7 @@ class Assistant(Tk):
 
         for next_tex in tuple_greetings:
             lebel = Label(master=self.central_frame, text=next_tex.upper(), font=20, anchor='center',
-                         highlightbackground='#404040')
+                         highlightbackground='#404040', foreground='gold')
             lebel.pack(pady=5, side=LEFT, padx=3)
 
     def voice_input(self) -> None:
