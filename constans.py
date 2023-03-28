@@ -1,7 +1,7 @@
 import os
 
-tuple_greetings = ('Play favorite Song', 'Check weather in Your City', 'Currency Convertor', 'Search Images', 'Search in Wiki', ' Set Timer',
-'Send Mail')
+tuple_greetings = ('Currency Convertor', 'Search Images', 'Search in Wiki', ' Set up Timer','Set up Stopwatch',
+'what\'s time now', 'what day today')
 
 my_name = 'My name is AIBO'
 
