@@ -1,5 +1,7 @@
 import os
 
+import psycopg2
+
 tuple_greetings = ('Play favorite Song', 'Check weather in Your City', 'Currency Convertor', 'Search Images', 'Search in Wiki', ' Set Timer',
 'Send Mail')
 
@@ -33,6 +35,8 @@ FONT_NAME = "Courier"
 API_KEY = "c66xOBOerxjgjCqRfbT3MzvIIqMoDm6e"
 REQUEST_URL = "https://api.apilayer.com/fixer/latest?base=USD"
 
+connection = psycopg2.connect(host=HOST, user=USER, password=PASSWORD, database=DB_NAME)
+connection.autocommit = True
 
 
 commands_list = {
