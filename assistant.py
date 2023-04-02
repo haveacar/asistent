@@ -412,9 +412,7 @@ class Assistant(Tk):
         """Function for user login/registration"""
 
         def create_account_window():
-            """
-            Function for tkinter settings of window to create new account
-            """
+            """Function for tkinter settings of window to create new account"""
             self.login_frame.pack_forget()
             self.create_acc_frame.pack()
             self.email_lbl_1.grid(column=1, row=0)
@@ -427,9 +425,7 @@ class Assistant(Tk):
             self.btn_exit_to_login.grid(column=1, row=7, pady=100, ipadx=2, ipady=2)
 
         def create_user_data():
-            """
-            Creating new account for user
-            """
+            """Creating new account for user"""
 
             login = self.entry_login_new_acc.get()
             password = self.entry_password_new_acc.get()
@@ -455,9 +451,7 @@ class Assistant(Tk):
                 self.btn_account.pack()
 
         def log_in():
-            """
-            Function for login user: check data from database and compare it with data from user
-            """
+            """Function for login user: check data from database and compare it with data from user"""
             login = self.entry_login_log_in.get()
             password = self.entry_password_log_in.get()
             self.database.log_in(login, password)
@@ -480,9 +474,7 @@ class Assistant(Tk):
                 self.btn_account.pack()
 
         def create_restore_passw_root():
-            """
-            Function for tkinter settings of window to create new password
-            """
+            """Function for tkinter settings of window to create new password"""
 
             self.login_frame.pack_forget()
             self.forgot_password_frame.pack()
@@ -492,9 +484,7 @@ class Assistant(Tk):
             self.btn_exit_to_login_1.grid(column=1, row=6, pady=100, ipadx=2, ipady=2)
 
         def new_password_1():
-            """
-            Function for write exist email and go to step 3(write new password)
-            """
+            """Function for write exist email and go to step 3(write new password"""
             login = self.entry_login_3.get()
 
             if len(login) == 0:
@@ -513,9 +503,7 @@ class Assistant(Tk):
             self.btn_exit_to_forget.grid(column=1, row=3, pady=50,ipady=4, ipadx=4)
 
         def new_password_2():
-            """
-            Function for add new password to database
-            """
+            """Function for add new password to database"""
             login = self.entry_login_3.get()
             password = self.new_passw_entry.get()
             if len(password) == 0:
@@ -532,9 +520,7 @@ class Assistant(Tk):
             self.btn_account.pack()
 
         def exit_to_forget():
-            """
-            Function for exit to last step in creating password
-            """
+            """Function for exit to last step in creating password"""
 
             self.forgot_password_frame_2.pack_forget()
             self.forgot_password_frame.pack()
@@ -617,6 +603,7 @@ class Assistant(Tk):
             self.btn_log.pack()
 
         def contact_root():
+            """Function for creating toplevel for write about program problems to developers"""
 
             self.contact_root = Toplevel(bg="grey")
             self.contact_root.title("Contact us")
@@ -644,16 +631,14 @@ class Assistant(Tk):
                 self.contact_root.destroy()
 
         def about():
-            """
-            This function for text label with description about developers
-            :return:
-            """
+            """This function for text label with description about developers"""
             about_root = Toplevel(bg="grey")
             about_root.title("About us")
             label_txt = Label(about_root, text=TEXT, font=("Ariel", 12, 'bold'))
             label_txt.pack()
 
         def change_login():
+            """Function for change login in database"""
             old_login = self.current_email
             new_login = self.new_login.get()
             name = self.name
@@ -677,6 +662,7 @@ class Assistant(Tk):
             self.change_login_root.destroy()
 
         def change_login_root():
+            """Function for create toplevel for change login"""
             self.change_login_root = Toplevel(bg="grey")
             self.change_login_root.title("Change login")
             Label(self.change_login_root, text="Enter new login", font=("Ariel", 25, "bold"), bg='grey').pack()
@@ -686,6 +672,7 @@ class Assistant(Tk):
             self.btn_change.pack(ipady=2, ipadx=2)
 
         def change_passw():
+            """Function for change password in database"""
             login = self.current_email
             old_password = self.current_password
             new_password = self.new_login.get()
@@ -705,6 +692,7 @@ class Assistant(Tk):
             self.change_passw_root.destroy()
 
         def change_password_root():
+            """Function for create toplevel for change password"""
             self.change_passw_root = Toplevel(bg="grey")
             self.change_passw_root.title("Change password")
             Label(self.change_passw_root, text="Enter new password", font=("Ariel", 25, "bold"), bg='grey').pack()
@@ -867,4 +855,5 @@ class Assistant(Tk):
                 self.response_lbl.config(text="I don't know this command:(")
 
 
-
+# TO-DO
+# Error with check for exist account on second time

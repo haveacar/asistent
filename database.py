@@ -112,6 +112,7 @@ class Database:
             print("[INFO] PostgreSQL connection closed")
 
     def change_login(self,old_login, new_login, name):
+        """Fucntion for change user login in database"""
         try:
             with connection.cursor() as cursor:
                 cursor.execute(f"SELECT password FROM user_data WHERE login='{old_login}'")
@@ -134,6 +135,7 @@ class Database:
                 print("[INFO] PostgreSQL connection closed")
 
     def exist_login(self, login):
+        """Function for check if email is already taken or not"""
         try:
             self.flag = False
             with connection.cursor() as cursor:
@@ -147,4 +149,8 @@ class Database:
             print("[ERROR] Error with login to account", _ex)
 
     def return_flag(self):
+        """
+        Function for return flag about checking exist email
+        :return: bool
+        """
         return self.flag
