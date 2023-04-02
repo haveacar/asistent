@@ -50,3 +50,10 @@ commands_list = {
 
     }
 }
+
+TEXT = """
+This program was written by Grigoriy Sokolov and Daniel Govnir as Pet-project for our GitHub.This project was important to us, because before we had no experience with Git. 
+So here our LinkedIns and GitHubs:)
+Grigoriy - https://github.com/Griso2010, https://www.linkedin.com/in/grigoriy-sokolov-99a438254/
+Daniel - https://github.com/haveacar, https://www.linkedin.com/in/daniel-govnir-2bb234214/
+"""

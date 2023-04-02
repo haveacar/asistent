@@ -1,9 +1,7 @@
 import sys
 from tkinter import *
 from PIL import ImageTk, Image
-# from constans import *
 import speech_recognition as sr
-
 from asistent.database import Database
 from response import *
 from tkinter import messagebox
@@ -418,7 +416,7 @@ class Assistant(Tk):
             """
             self.login_frame.pack_forget()
             self.create_acc_frame.pack()
-            self.email_lbl.grid(column=1, row=0)
+            self.email_lbl_1.grid(column=1, row=0)
             self.entry_login_new_acc.grid(column=1, row=1)
             self.passw_lbl.grid(column=1, row=2)
             self.entry_password_new_acc.grid(column=1, row=3)
@@ -444,7 +442,7 @@ class Assistant(Tk):
                 messagebox.showinfo(message="Registration was successful!")
                 self.current_email = login
                 login_root.destroy()
-                self.btn_log.destroy()
+                self.btn_log.pack_forget()
                 self.btn_account.pack()
 
         def log_in():
@@ -468,7 +466,7 @@ class Assistant(Tk):
                 self.current_email = login
 
                 login_root.destroy()
-                self.btn_log.destroy()
+                self.btn_log.pack_forget()
                 self.btn_account.pack()
 
         def create_restore_passw_root():
@@ -478,7 +476,7 @@ class Assistant(Tk):
 
             self.login_frame.pack_forget()
             self.forgot_password_frame.pack()
-            self.email_lbl.grid(column=1, row=0, pady=20)
+            self.email_lbl_2.grid(column=1, row=0, pady=20)
             self.entry_login_3.grid(column=1, row=1)
             self.btn_restore_passw.grid(column=1, row=2, pady=10, ipady=5)
             self.btn_exit_to_login_1.grid(column=1, row=6, pady=100, ipadx=2, ipady=2)
@@ -518,7 +516,7 @@ class Assistant(Tk):
 
             messagebox.showinfo(message="Password changed!")
             self.current_email = login
-            self.btn_log.destroy()
+            self.btn_log.pack_forget()
             login_root.destroy()
             self.btn_account.pack()
 
@@ -573,18 +571,18 @@ class Assistant(Tk):
 
         # Create account setups
         self.create_acc_frame = Frame(login_root, bg=bg)
-        self.email_lbl = Label(self.create_acc_frame, text="Enter your e-mail", bg=bg)
+        self.email_lbl_1 = Label(self.create_acc_frame, text="Enter your e-mail",font=("Arial",15, "bold"), bg=bg)
         self.entry_login_new_acc = Entry(self.create_acc_frame)
-        self.passw_lbl = Label(self.create_acc_frame, text="Password", bg=bg)
+        self.passw_lbl = Label(self.create_acc_frame, text="Password", font=("Arial",15, "bold"), bg=bg)
         self.entry_password_new_acc = Entry(self.create_acc_frame)
-        self.name_lbl = Label(self.create_acc_frame, text="Enter Your name", bg=bg)
+        self.name_lbl = Label(self.create_acc_frame, text="Enter Your name", font=("Arial",15, "bold"), bg=bg)
         self.entry_name = Entry(self.create_acc_frame)
         self.btn_create = Button(self.create_acc_frame, text="Create account", command=create_user_data, highlightbackground=bg)
         self.btn_exit_to_login = Button(self.create_acc_frame, text="Exit", command=exit_to_login, highlightbackground=bg)
 
         # Forgot password setups
         self.forgot_password_frame = Frame(login_root, bg=bg)
-        self.email_lbl = Label(self.forgot_password_frame, text="Enter your e-mail", bg=bg, font=("Arial", 20, "bold"))
+        self.email_lbl_2 = Label(self.forgot_password_frame, text="Enter your e-mail", bg=bg, font=("Arial", 20, "bold"))
         self.entry_login_3 = Entry(self.forgot_password_frame)
         self.btn_restore_passw = Button(self.forgot_password_frame, text="Continue", highlightbackground=bg, command=new_password_1)
         self.btn_exit_to_login_1 = Button(self.forgot_password_frame, text="Exit", command=exit_to_login, highlightbackground=bg)
@@ -605,27 +603,65 @@ class Assistant(Tk):
             """Function for exit from account"""
             self.account_root.destroy()
             self.btn_account.destroy()
-            # self.btn_log.pack()
+            self.btn_log.pack()
+
+        def contact_root():
+
+            self.contact_root = Toplevel(bg="grey")
+            self.contact_root.title("Contact us")
+            Label(self.contact_root, text="Please write about your problem", font=("Ariel", 12, 'bold'), bg="grey").pack()
+            self.message = Text(self.contact_root)
+            self.message.pack()
+            button_send = Button(self.contact_root,text="Send", font=("Ariel", 12, "bold"), highlightbackground='grey', command=contact)
+            button_send.pack(ipadx=2, ipady=2, pady=25)
+
+        def contact():
+            """Function for write user message to database"""
+            message = "Hello"
+            login = 'griso2010'
+            name = "grisha"
+
+            if len(message) == 0:
+                messagebox.showerror(message="Message is empty")
+                return
+
+            else:
+                self.database.contact(login, name, message)
+                messagebox.showinfo(message="Message was send!")
+                print("[INFO] Message was send to developers")
+                self.contact_root.destroy()
+
+        def about():
+            """
+            This function for text label with description about developers
+            :return:
+            """
+            about_root = Toplevel(bg="grey")
+            about_root.title("About us")
+            label_txt = Label(about_root, text=TEXT, font=("Ariel", 12, 'bold'))
+            label_txt.pack()
+
+        def change_password():
+            pass
+
+        def change_login():
+            pass
 
         # Top level setups
         bg = "#FF7F50"
         city = IntVar()
-        dark_theme = IntVar()
         self.account_root = Toplevel(bg=bg)
         self.account_frame = Frame(self.account_root, bg=bg)
         self.account_frame.pack()
         self.account_root.title("Your account")
-        # account_root.geometry("550x450")
         self.account_root.resizable(False, False)
 
         # Account setups
-        name_lbl = Label(self.account_frame, text=f"Hello {self.database.select_name(self.current_email)}!", font=("Ariel", 20, 'bold'),bg=bg, fg="black")
+        name = self.database.select_name(self.current_email)[0].capitalize()
+        name_lbl = Label(self.account_frame, text=f"Hello {name}!", font=("Ariel", 20, 'bold'),bg=bg, fg="black")
+        change_login = Button(self.account_frame, text="Change login", highlightbackground=bg)
+        change_password = Button(self.account_frame, text="Change password", highlightbackground=bg)
 
-        enabled_checkbutton = Checkbutton(self.account_frame, text="Determine your location by GPS", variable=city, bg=bg)
-        self.btn_save = Button(self.account_frame, text="Save changes", highlightbackground=bg)
-        dark_theme = Checkbutton(self.account_frame, text="Dark theme", variable=dark_theme, bg=bg)
-
-        # Add user photo with canvas
 
         # Menu
         self.account_root.option_add('*tearOff', False)
@@ -633,19 +669,17 @@ class Assistant(Tk):
         self.account_root.config(menu=root_menubar)
         file_menu = Menu(root_menubar)
         # add menu items to file menu
-        file_menu.add_command(label='Contact to developer')
-        file_menu.add_command(label='About program')
-        file_menu.add_command(label='Check for updates')
+        file_menu.add_command(label='Contact to developer', command=contact_root)
+        file_menu.add_command(label='About program', command=about)
         file_menu.add_separator(background='red')
         file_menu.add_command(label='Log out', command=log_out)
-        # add menu items to root menubar
+        # Add menu items to root menubar
         root_menubar.add_cascade(label='Options', menu=file_menu)
 
-        # Grid
-        name_lbl.grid(column=0, row=0)
-        enabled_checkbutton.grid(column=0, row=1)
-        dark_theme.grid(column=0, row=2)
-        self.btn_save.grid(column=0, row=5)
+        # Pack
+        name_lbl.pack()
+        change_login.pack(side=LEFT)
+        change_password.pack(side=LEFT)
 
     def currency(self):
         """Func Currency Converter"""

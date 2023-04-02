@@ -6,18 +6,12 @@ class Database:
         pass
 
     def create_account(self, login, password, name):
-        """
-        Function for creating account and adding all his data to database
-        :param login: email of user
-        :param password: password for account
-        :param name: name of user
-        :return:
-        """
+        """Function for creating account and adding all his data to database"""
         try:
             # create a new table
             with connection.cursor() as cursor:
                 cursor.execute(f"CREATE TABLE IF NOT EXISTS user_data(id serial PRIMARY KEY, login VARCHAR, password VARCHAR, name VARCHAR)")
-                print("[INFO] Table created successfully")
+                print("[INFO] Table user_data created successfully")
 
                 cursor.execute("INSERT INTO user_data (login, password, name) VALUES (%s, %s, %s);", (login, password, name))
                 print("[INFO] Data was successfully inserted")
@@ -26,11 +20,7 @@ class Database:
             print("[ERROR] Error while working with PostgreSQL", _ex)
 
     def check_exist_account(self, login):
-        """
-        Function checking if data of user in the database or no
-        :param login: email from user
-        :return:
-        """
+        """Function checking if data of user in the database or no"""
         try:
             with connection.cursor() as cursor:
                 cursor.execute(f"SELECT * FROM user_data WHERE login='{login}'")
@@ -44,11 +34,7 @@ class Database:
             print("[INFO] PostgreSQL connection closed")
 
     def new_password(self, login, password):
-        """
-
-        :param login: users email
-        :param password: new password from user
-        """
+        """Function for create new password for user"""
 
         try:
             with connection.cursor() as cursor:
@@ -71,11 +57,7 @@ class Database:
                 print("[INFO] PostgreSQL connection closed")
 
     def select_name(self, login):
-        """
-        Function for select name from database
-        :param login: login from user
-        :return: name of user
-        """
+        """Function for select name from database"""
         try:
             with connection.cursor() as cursor:
                 cursor.execute(f"SELECT name FROM user_data WHERE login='{login}'")
@@ -89,11 +71,7 @@ class Database:
             print("[INFO] PostgreSQL connection closed")
 
     def log_in(self, login, password):
-        """
-        Function for checking if user_data compare with data from database
-        :param login: login from user
-        :param password: password from user
-        """
+        """Function for checking if user_data compare with data from database"""
         flag = None
 
         try:
@@ -113,8 +91,25 @@ class Database:
                     print("[INFO] PostgreSQL connection closed")
 
     def return_query_result(self):
-        """
-        Function for checking user have a record in database
-        :return: all data about user
-        """
+        """Function for checking user have a record in database"""
         return self.query_result
+
+    def contact(self, login, name, message):
+        """Function for write user problem to database"""
+        try:
+            print("Start")
+            # create a new table
+            with connection.cursor() as cursor:
+                cursor.execute(f"CREATE TABLE IF NOT EXISTS user_problems(id serial PRIMARY KEY, login VARCHAR, name VARCHAR, message VARCHAR)")
+                print("[INFO] Table user_problems was created successfully")
+
+                cursor.execute("INSERT INTO user_problems (login, name, message) VALUES (%s, %s, %s);", (login, name, message))
+                print("[INFO] Data was successfully inserted")
+
+        except Exception as _ex:
+            print("[ERROR] Error:", _ex)
+
+        finally:
+            print("[INFO] PostgreSQL connection closed")
+
+
