@@ -112,4 +112,25 @@ class Database:
         finally:
             print("[INFO] PostgreSQL connection closed")
 
+    def change_login(self,old_login, new_login, name):
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(f"SELECT password FROM user_data WHERE login='{old_login}'")
+                self.password = cursor.fetchone()
+
+                cursor.execute(f"DELETE from user_data WHERE login='{old_login}'")
+                print("[INFO] Old login  was delete")
+
+                cursor.execute("INSERT INTO user_data (login, password, name) VALUES (%s, %s, %s);",
+                               (new_login, self.password, name))
+
+                print("[INFO] New login was added to database")
+
+        except Exception as _ex:
+            print("[ERROR] Error with login to account", _ex)
+
+        finally:
+            if connection:
+                connection.close()
+                print("[INFO] PostgreSQL connection closed")
 

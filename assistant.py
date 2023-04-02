@@ -40,6 +40,7 @@ class Assistant(Tk):
         self.btn_log = Button(self.top_frame,text="LOGIN", command=self.login, highlightbackground='#404040')
         self.btn_account = Button(self.top_frame, text="Account", command=self.account, highlightbackground='#404040')
         self.current_email = ""
+        self.current_password = ""
 
     def validate(self, new_value) -> str | int:
         """
@@ -441,6 +442,7 @@ class Assistant(Tk):
                 self.database.create_account(login, password, name)
                 messagebox.showinfo(message="Registration was successful!")
                 self.current_email = login
+                self.current_password = password
                 login_root.destroy()
                 self.btn_log.pack_forget()
                 self.btn_account.pack()
@@ -464,6 +466,7 @@ class Assistant(Tk):
                 messagebox.showinfo(message="Login to the account was made successfully! ")
 
                 self.current_email = login
+                self.current_password = password
 
                 login_root.destroy()
                 self.btn_log.pack_forget()
@@ -516,6 +519,7 @@ class Assistant(Tk):
 
             messagebox.showinfo(message="Password changed!")
             self.current_email = login
+            self.current_password = password
             self.btn_log.pack_forget()
             login_root.destroy()
             self.btn_account.pack()
@@ -617,9 +621,9 @@ class Assistant(Tk):
 
         def contact():
             """Function for write user message to database"""
-            message = "Hello"
-            login = 'griso2010'
-            name = "grisha"
+            message = self.message.get("1.0", END)
+            login = self.current_email
+            name = self.nameс
 
             if len(message) == 0:
                 messagebox.showerror(message="Message is empty")
@@ -629,6 +633,7 @@ class Assistant(Tk):
                 self.database.contact(login, name, message)
                 messagebox.showinfo(message="Message was send!")
                 print("[INFO] Message was send to developers")
+
                 self.contact_root.destroy()
 
         def about():
@@ -641,15 +646,65 @@ class Assistant(Tk):
             label_txt = Label(about_root, text=TEXT, font=("Ariel", 12, 'bold'))
             label_txt.pack()
 
-        def change_password():
-            pass
-
         def change_login():
-            pass
+            old_login = self.current_email
+            new_login = self.new_login.get()
+            name = self.name
+
+            if len(new_login) == 0:
+                messagebox.showerror(title='Error', message="Field is empty")
+                return
+            if new_login == old_login:
+                messagebox.showerror(title='Error', message="Mew login is copy of old login")
+                return
+
+            self.database.change_login(old_login, new_login, name)
+            messagebox.showinfo(title="INFO", message="Login was changed")
+            print("[INFO] Login was changed")
+
+            self.change_login_root.destroy()
+
+        def change_login_root():
+            self.change_login_root = Toplevel(bg="grey")
+            self.change_login_root.title("Change login")
+            Label(self.change_login_root, text="Enter new login", font=("Ariel", 25, "bold"), bg='grey').pack()
+            self.new_login = Entry(self.change_login_root)
+            self.new_login.pack()
+            self.btn_change = Button(self.change_login_root, text="Change login", highlightbackground='grey', command=change_login)
+            self.btn_change.pack(ipady=2, ipadx=2)
+
+        def change_passw():
+            login = self.current_email
+            old_password = self.current_password
+            new_password = self.new_login.get()
+            name = self.name
+
+            if len(new_password) == 0:
+                messagebox.showerror(title='Error', message="Field is empty")
+                return
+            if new_password == old_password:
+                messagebox.showerror(title='Error', message="Mew password is copy of old password")
+                return
+
+            self.database.new_password(login, new_password)
+            messagebox.showinfo(title="INFO", message="Password was changed")
+            print("[INFO] Password was changed")
+
+            self.change_passw_root.destroy()
+
+        def change_password_root():
+            self.change_passw_root = Toplevel(bg="grey")
+            self.change_passw_root.title("Change password")
+            Label(self.change_passw_root, text="Enter new password", font=("Ariel", 25, "bold"), bg='grey').pack()
+            self.new_login = Entry(self.change_passw_root)
+            self.new_login.pack()
+            self.btn_change = Button(self.change_passw_root, text="Change password", highlightbackground='grey',
+                                     command=change_passw)
+            self.btn_change.pack(ipady=2, ipadx=2)
+
 
         # Top level setups
         bg = "#FF7F50"
-        city = IntVar()
         self.account_root = Toplevel(bg=bg)
         self.account_frame = Frame(self.account_root, bg=bg)
         self.account_frame.pack()
@@ -657,10 +712,10 @@ class Assistant(Tk):
         self.account_root.resizable(False, False)
 
         # Account setups
-        name = self.database.select_name(self.current_email)[0].capitalize()
-        name_lbl = Label(self.account_frame, text=f"Hello {name}!", font=("Ariel", 20, 'bold'),bg=bg, fg="black")
-        change_login = Button(self.account_frame, text="Change login", highlightbackground=bg)
-        change_password = Button(self.account_frame, text="Change password", highlightbackground=bg)
+        self.name = self.database.select_name(self.current_email)[0].capitalize()
+        name_lbl = Label(self.account_frame, text=f"Hello {self.name}!", font=("Ariel", 20, 'bold'),bg=bg, fg="black")
+        change_login = Button(self.account_frame, text="Change login", highlightbackground=bg, command=change_login_root)
+        change_password = Button(self.account_frame, text="Change password", highlightbackground=bg, command=change_password_root)
 
 
         # Menu
