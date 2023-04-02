@@ -97,7 +97,6 @@ class Database:
     def contact(self, login, name, message):
         """Function for write user problem to database"""
         try:
-            print("Start")
             # create a new table
             with connection.cursor() as cursor:
                 cursor.execute(f"CREATE TABLE IF NOT EXISTS user_problems(id serial PRIMARY KEY, login VARCHAR, name VARCHAR, message VARCHAR)")
@@ -134,3 +133,18 @@ class Database:
                 connection.close()
                 print("[INFO] PostgreSQL connection closed")
 
+    def exist_login(self, login):
+        try:
+            self.flag = False
+            with connection.cursor() as cursor:
+                cursor.execute(f"SELECT * FROM user_data WHERE login='{login}'")
+                self.exist_login = cursor.fetchall()
+                print(self.exist_login)
+                if len(self.exist_login) != 0:
+                    self.flag = True
+
+        except Exception as _ex:
+            print("[ERROR] Error with login to account", _ex)
+
+    def return_flag(self):
+        return self.flag

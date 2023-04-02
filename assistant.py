@@ -430,12 +430,19 @@ class Assistant(Tk):
             """
             Creating new account for user
             """
+
             login = self.entry_login_new_acc.get()
             password = self.entry_password_new_acc.get()
             name = self.entry_name.get()
+            # Check for exist account with same email
+            self.database.exist_login(login)
 
             if len(login) == 0 or len(password) == 0 or len(name) == 0:
                 messagebox.showerror(message="One of the fields is empty")
+                return
+
+            if self.database.return_flag():
+                messagebox.showerror(message="This email is already taken")
                 return
 
             else:
@@ -650,6 +657,11 @@ class Assistant(Tk):
             old_login = self.current_email
             new_login = self.new_login.get()
             name = self.name
+            self.database.exist_login(new_login)
+
+            if self.database.return_flag():
+                messagebox.showerror(message="This email is already taken")
+                return
 
             if len(new_login) == 0:
                 messagebox.showerror(title='Error', message="Field is empty")
